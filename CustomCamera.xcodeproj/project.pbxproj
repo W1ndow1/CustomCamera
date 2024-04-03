@@ -11,6 +11,8 @@
 		A80EE4512BB6AB3000546B95 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80EE4502BB6AB3000546B95 /* ContentView.swift */; };
 		A80EE4532BB6AB3200546B95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A80EE4522BB6AB3200546B95 /* Assets.xcassets */; };
 		A80EE4572BB6AB3200546B95 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A80EE4562BB6AB3200546B95 /* Preview Assets.xcassets */; };
+		A80EE4612BB6B86000546B95 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80EE4602BB6B86000546B95 /* CameraModel.swift */; };
+		A83AE9C82BB841C0001BDBDB /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9C72BB841C0001BDBDB /* CameraService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		A80EE4522BB6AB3200546B95 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A80EE4542BB6AB3200546B95 /* CustomCamera.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CustomCamera.entitlements; sourceTree = "<group>"; };
 		A80EE4562BB6AB3200546B95 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		A80EE4602BB6B86000546B95 /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
+		A83AE9C72BB841C0001BDBDB /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,8 +56,10 @@
 		A80EE44D2BB6AB3000546B95 /* CustomCamera */ = {
 			isa = PBXGroup;
 			children = (
+				A83AE9C62BB841B2001BDBDB /* Service */,
+				A80EE45E2BB6B79000546B95 /* View */,
+				A80EE45D2BB6B78100546B95 /* Model */,
 				A80EE44E2BB6AB3000546B95 /* CustomCameraApp.swift */,
-				A80EE4502BB6AB3000546B95 /* ContentView.swift */,
 				A80EE4522BB6AB3200546B95 /* Assets.xcassets */,
 				A80EE4542BB6AB3200546B95 /* CustomCamera.entitlements */,
 				A80EE4552BB6AB3200546B95 /* Preview Content */,
@@ -67,6 +73,30 @@
 				A80EE4562BB6AB3200546B95 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A80EE45D2BB6B78100546B95 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A80EE4602BB6B86000546B95 /* CameraModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		A80EE45E2BB6B79000546B95 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A80EE4502BB6AB3000546B95 /* ContentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A83AE9C62BB841B2001BDBDB /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				A83AE9C72BB841C0001BDBDB /* CameraService.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,8 +169,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A83AE9C82BB841C0001BDBDB /* CameraService.swift in Sources */,
 				A80EE4512BB6AB3000546B95 /* ContentView.swift in Sources */,
 				A80EE44F2BB6AB3000546B95 /* CustomCameraApp.swift in Sources */,
+				A80EE4612BB6B86000546B95 /* CameraModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,6 +306,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -312,6 +346,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
