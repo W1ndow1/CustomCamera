@@ -13,6 +13,10 @@
 		A80EE4572BB6AB3200546B95 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A80EE4562BB6AB3200546B95 /* Preview Assets.xcassets */; };
 		A80EE4612BB6B86000546B95 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80EE4602BB6B86000546B95 /* CameraModel.swift */; };
 		A83AE9C82BB841C0001BDBDB /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9C72BB841C0001BDBDB /* CameraService.swift */; };
+		A83AE9CA2BBFD6BD001BDBDB /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */; };
+		A83AE9CC2BC05134001BDBDB /* CameraServiceEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9CB2BC05134001BDBDB /* CameraServiceEnum.swift */; };
+		A83AE9CE2BC05C41001BDBDB /* PhotoCature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9CD2BC05C41001BDBDB /* PhotoCature.swift */; };
+		A83AE9D02BC82987001BDBDB /* ImageResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9CF2BC82987001BDBDB /* ImageResizer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +28,10 @@
 		A80EE4562BB6AB3200546B95 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A80EE4602BB6B86000546B95 /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
 		A83AE9C72BB841C0001BDBDB /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
+		A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		A83AE9CB2BC05134001BDBDB /* CameraServiceEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraServiceEnum.swift; sourceTree = "<group>"; };
+		A83AE9CD2BC05C41001BDBDB /* PhotoCature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCature.swift; sourceTree = "<group>"; };
+		A83AE9CF2BC82987001BDBDB /* ImageResizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				A80EE4502BB6AB3000546B95 /* ContentView.swift */,
+				A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -95,6 +104,9 @@
 			isa = PBXGroup;
 			children = (
 				A83AE9C72BB841C0001BDBDB /* CameraService.swift */,
+				A83AE9CB2BC05134001BDBDB /* CameraServiceEnum.swift */,
+				A83AE9CD2BC05C41001BDBDB /* PhotoCature.swift */,
+				A83AE9CF2BC82987001BDBDB /* ImageResizer.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -169,10 +181,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A83AE9CE2BC05C41001BDBDB /* PhotoCature.swift in Sources */,
+				A83AE9CA2BBFD6BD001BDBDB /* CameraPreview.swift in Sources */,
 				A83AE9C82BB841C0001BDBDB /* CameraService.swift in Sources */,
 				A80EE4512BB6AB3000546B95 /* ContentView.swift in Sources */,
+				A83AE9D02BC82987001BDBDB /* ImageResizer.swift in Sources */,
 				A80EE44F2BB6AB3000546B95 /* CustomCameraApp.swift in Sources */,
 				A80EE4612BB6B86000546B95 /* CameraModel.swift in Sources */,
+				A83AE9CC2BC05134001BDBDB /* CameraServiceEnum.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,7 +247,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -286,7 +304,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -307,7 +327,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "촬영한 사진을 저장하기 위해 권한 승인이 필요합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -318,7 +338,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
@@ -347,7 +367,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "촬영한 사진을 저장하기 위해 권한 승인이 필요합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -358,7 +378,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.2;

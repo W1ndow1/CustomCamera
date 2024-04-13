@@ -8,67 +8,68 @@
 import Foundation
 import SwiftUI
 import AVKit
+import Combine
 
 class CameraModel: ObservableObject {
     
-    @Published var captureSession = AVCaptureSession()
-    @Published var ouput = AVCapturePhotoOutput()
-    @Published var setting = AVCapturePhotoSettings()
-    @Published var previewLayer = AVCaptureVideoPreviewLayer()
+    private let service = CameraService()
     
-    func checkPermission() {
-        switch AVCaptureDevice.authorizationStatus(for: .video) {
-        case .notDetermined:
-            AVCaptureDevice.requestAccess(for: .video) { [weak self] status in
-                guard status else { return }
-                DispatchQueue.main.async {
-                    self?.setUpCamera()
-                }
-            }
-        case .restricted:
-            break
-        case .authorized:
-            setUpCamera()
-        case .denied:
-            break
-        @unknown default:
-            break
+    @Published var photo: Photo!
+    @Published var showAlertError = false
+    @Published var isFlashOn = false
+    @Published var willCapturePhoto = false
+    
+    var alertError: AlertError!
+    
+    var session: AVCaptureSession
+    
+    private var subscriptions = Set<AnyCancellable>()
+    
+    init() {
+        self.session = service.session
+        
+        service.$photo.sink { [weak self] photo in
+            guard let pic = photo else { return }
+            self?.photo = pic
         }
-    }
-    
-    func setUpCamera() {
-        captureSession.beginConfiguration()
-        do {
-            
-            let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
-            let input = try AVCaptureDeviceInput(device: device!)
-            
-            guard captureSession.canAddInput(input) else { return }
-            captureSession.addInput(input)
-            guard captureSession.canAddOutput(ouput) else { return }
-            captureSession.addOutput(ouput)
-            
-            previewLayer.videoGravity = .resizeAspectFill
-            previewLayer.session = captureSession
-            
-            captureSession.startRunning()
-            self.captureSession = captureSession
-            
-        } catch {
-            print(error.localizedDescription)
+        .store(in: &self.subscriptions)
+        
+        service.$shouldShowAlertView.sink { [weak self] (val) in
+            self?.alertError = self?.service.alertError
+            self?.showAlertError = val
         }
+        .store(in: &self.subscriptions)
+        
+        service.$flashMode.sink { [weak self] (mode) in
+            self?.isFlashOn = mode == .on
+        }
+        .store(in: &self.subscriptions)
+        
+        service.$willCapturePhoto.sink { [weak self] (val) in
+            self?.willCapturePhoto = val
+        }
+        .store(in: &self.subscriptions)
     }
-}
-
-struct CameraPreview: UIViewRepresentable {
     
-    func makeUIView(context: Context) -> UIView {
-        let view = UIView(frame: UIScreen.main.bounds)
-        return view
+    func configure() {
+        service.checkPermission()
+        service.configure()
     }
     
-    func updateUIView(_ uiView: UIView, context: Context) {
+    func capturePhoto() {
+        service.capturePhoto()
     }
     
+    func flipCamera() {
+        service.changeCamera()
+    }
+    
+    func zoom(with factor: CGFloat) {
+        service.setZoom(zoom: factor)
+    }
+    
+    func switchFlash() {
+        service.flashMode = service.flashMode == .on ? .off : .on
+    }
 }
 
