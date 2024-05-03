@@ -1,119 +1,205 @@
-//
-//  ContentView.swift
-//  CustomCamera
-//
-//  Created by window1 on 3/29/24.
-//
+
 
 import SwiftUI
+import PhotosUI
 
 struct ContentView: View {
-    @StateObject var model = CameraModel()
-    @State var currentZoomFactor: CGFloat = 1.0
-    @State var animationValue = 0.5
+    @StateObject var simpleModel = CameraViewModel()
+    @State var zoomValue: String = "0.0"
+    var degToFaceUp: Double
+    
+    var body: some View {
+        ZStack {
+            if #available(iOS 17.0, *) {
+                simpleModel.cameraPreview.ignoresSafeArea()
+                    .onAppear() {
+                        simpleModel.configure()
+                    }
+                    .gesture(MagnifyGesture()
+                        .onChanged { val in
+                            simpleModel.zoom(factor: val.magnification)
+                            zoomValue = String(describing: round(val.magnification))
+                        }
+                        .onEnded { _ in
+                            simpleModel.zoomInitialize()
+                        }
+                    )
+            } else {
+                simpleModel.cameraPreview.ignoresSafeArea()
+                    .onAppear() {
+                        simpleModel.configure()
+                    }
+                    .gesture(MagnificationGesture()
+                        .onChanged { value in
+                            simpleModel.zoom(factor: value)
+                        }
+                        .onEnded { _ in
+                            simpleModel.zoomInitialize()
+                        }
+                    )
+            }
+            VStack {
+                HStack(spacing: 70){
+                    silentShutterButton
+                    livePhotoButton
+                    waterMarkButton
+                    flashButton
+                }
+                .padding(.vertical, 20)
+                Spacer()
+                
+                if simpleModel.isWaterMarkOn {
+                    WaterMarkView()
+                        .viewRotationEffect(deg: degToFaceUp)
+                }
+                
+                Spacer()
+                Text(zoomValue)
+                    .foregroundStyle(.yellow)
+                    .viewRotationEffect(deg: degToFaceUp)
+                LensChangeView()
+                    .overlay {
+                        HStack(spacing: 25) {
+                            LensChangeView().ultraWideAngleLens
+                                .viewRotationEffect(deg: degToFaceUp)
+                            LensChangeView().wideLens
+                                .viewRotationEffect(deg: degToFaceUp)
+                            LensChangeView().telescopeLens
+                                .viewRotationEffect(deg: degToFaceUp)
+                        }
+                    }
+                HStack {
+                    capturedPhotoThumbnail
+                    Spacer()
+                    captureButton
+                    Spacer()
+                    flipCameraButton
+                }
+                .padding(.horizontal, 20)
+            }
+            
+        }
+        .opacity(simpleModel.shutterEffect ? 0 : 1)
+    }
+}
+
+
+#Preview {
+    ContentView(degToFaceUp: 0)
+}
+
+extension ContentView {
+    
+    var waterMarkButton: some View {
+        Button(action: {
+            simpleModel.switchWaterMark()
+        }, label: {
+            Image(systemName: simpleModel.isWaterMarkOn ? "bookmark.fill" : "bookmark.slash.fill")
+                .viewRotationEffect(deg: degToFaceUp)
+                .font(.system(size: 20, weight: .medium, design: .default))
+                .frame(width: 40)
+        })
+        .foregroundStyle(simpleModel.isWaterMarkOn ? .yellow : .white)
+    }
+    
+    
+    var livePhotoButton: some View {
+        Button(action: {
+            simpleModel.switchLivePhoto()
+        }, label: {
+            Image(systemName: simpleModel.isLivePhotoOn ? "livephoto.slash" : "livephoto")
+                .viewRotationEffect(deg: degToFaceUp)
+                .font(.system(size: 20, weight: .medium, design: .default))
+                .frame(width: 40)
+        })
+        .foregroundStyle(simpleModel.isLivePhotoOn ? .yellow : .white)
+    }
+    
+    var silentShutterButton: some View {
+        Button {
+            simpleModel.switchSilent()
+        }label: {
+            Image(systemName: simpleModel.isSilentModeOn ? "speaker.slash.fill" : "speaker.fill")
+                .viewRotationEffect(deg: degToFaceUp)
+                .font(.system(size: 20, weight: .medium, design: .default))
+                .frame(width: 40)
+        }
+        .foregroundStyle(simpleModel.isSilentModeOn ? .yellow : .white)
+    }
+    
+    var flashButton: some View {
+        Button {
+            simpleModel.switchFlash()
+        } label: {
+            Image(systemName: simpleModel.isFlashedOn ? "bolt.fill" : "bolt.slash.fill")
+                .viewRotationEffect(deg: degToFaceUp)
+                .font(.system(size: 20, weight: .medium, design: .default))
+                .frame(width: 40)
+        }
+        .foregroundStyle(simpleModel.isFlashedOn ? .yellow : .white)
+        
+    }
     
     var captureButton: some View {
         Button(action: {
-            model.capturePhoto()
+            simpleModel.capturePhoto()
+            simpleModel.waterMarkImage = simpleModel.isWaterMarkOn ? viewToImage(view: WaterMarkView()) : nil
         }, label: {
             Circle()
                 .foregroundStyle(.white)
                 .frame(width: 70, height: 70)
                 .overlay(content: {
                     Circle()
-                        .stroke(Color.black.opacity(0.8), lineWidth: 2)
+                        .stroke(Color.black.opacity(0.2), lineWidth: 2)
                         .frame(width: 65, height: 65, alignment: .center)
                 })
         })
+        .viewRotationEffect(deg: degToFaceUp)
     }
     
     var capturedPhotoThumbnail: some View {
-        Group {
-            if model.photo != nil {
-                Image(uiImage: model.photo.image!)
+        PhotosPicker(selection: $simpleModel.imageSelection, matching: .images, photoLibrary: .shared()) {
+            if let previewImage = simpleModel.recentImage {
+                Image(uiImage: previewImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 60, height: 60)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                    .animation(.spring(), value: animationValue)
+                    .animation(.spring(), value: 0.5)
             } else {
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 15)
                     .stroke(Color.white, lineWidth: 1)
                     .frame(width: 60, height: 60, alignment: .center)
                     .foregroundStyle(.black)
             }
         }
-    }
-    var filpCameraButton: some View {
-        Button(action: {
-            model.flipCamera()
-        }, label: {
-            Circle()
-                .foregroundStyle(.gray.opacity(0.2))
-                .frame(width: 45, height: 45, alignment: .center)
-                .overlay(content: {
-                    Image(systemName: "camera.rotate.fill")
-                        .foregroundStyle(.white)
-                })
-        })
+        .viewRotationEffect(deg: degToFaceUp)
     }
     
-    var body: some View {
-        GeometryReader { reader in
-            ZStack {
-                Color.black.ignoresSafeArea(.all)
-                VStack {
-                    Button(action: {
-                        model.switchFlash()
-                    }, label: {
-                        Image(systemName: model.isFlashOn ? "bolt.fill" : "bolt.slash.fill")
-                            .font(.system(size: 20, weight: .medium, design: .default))
-                    })
-                    .foregroundStyle(model.isFlashOn ? .yellow : .white)
+    var flipCameraButton: some View {
+        Button(action: {
+            simpleModel.flipCamera()
+        }, label: {
+            Circle()
+                .foregroundStyle(.black.opacity(0.2))
+                .frame(width: 60, height: 60, alignment: .center)
+                .overlay(content: {
+                    Image(systemName: "camera.rotate.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(.white)
+                        .frame(width: 33)
                     
-                    CameraPreview(session: model.session)
-                        .gesture(
-                            DragGesture().onChanged({ drag in
-                                if abs(drag.translation.height) > abs(drag.translation.width) {
-                                    let percentage: CGFloat = -(drag.translation.height / reader.size.height)
-                                    let calc = currentZoomFactor + percentage
-                                    let zoomFactor: CGFloat = min(max(calc, 1), 5)
-                                    currentZoomFactor = zoomFactor
-                                    model.zoom(with: zoomFactor)
-                                }
-                            })
-                        )
-                        .onAppear {
-                            model.configure()
-                        }
-                        .alert(isPresented: $model.showAlertError, content: {
-                            Alert(title: Text(model.alertError.title), message: Text(model.alertError.message), dismissButton: .default(Text(model.alertError.primaryButtonTitle), action: { model.alertError.primaryAction?()
-                            }))
-                        })
-                        .overlay(
-                            Group{
-                                if model.willCapturePhoto{
-                                    Color.black
-                                }
-                            }
-                        )
-                        .animation(.easeInOut, value: 0.5)
-                    
-                    HStack{
-                        capturedPhotoThumbnail
-                        Spacer()
-                        captureButton
-                        Spacer()
-                        filpCameraButton
-                    }
-                    .padding(.horizontal, 20)
-                }
-            }
-        }
+                })
+        })
+        .viewRotationEffect(deg: degToFaceUp)
+        .disabled(simpleModel.shutterEffect)
     }
 }
 
-
-#Preview {
-    ContentView()
+extension View {
+    func viewRotationEffect(deg: Double) -> some View{
+        self.rotationEffect(Angle(degrees: deg))
+            .animation(.easeInOut(duration: 0.5), value: deg)
+    }
 }

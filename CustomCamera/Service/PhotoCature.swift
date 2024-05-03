@@ -1,9 +1,4 @@
-//
-//  PhotoCature.swift
-//  CustomCamera
-//
-//  Created by window1 on 4/6/24.
-//
+
 
 import Photos
 

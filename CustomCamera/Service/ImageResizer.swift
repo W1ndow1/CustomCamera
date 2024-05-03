@@ -1,9 +1,4 @@
-//
-//  ImageResizer.swift
-//  CustomCamera
-//
-//  Created by window1 on 4/11/24.
-//
+
 
 import Foundation
 import UIKit
@@ -16,6 +11,7 @@ enum ImageResizingError: Error {
 public struct ImageResizer {
     var targetWidth: CGFloat
     
+    @available(iOS 16.0, *)
     public func resize(at url: URL) -> UIImage? {
         guard let image = UIImage(contentsOfFile: url.path(percentEncoded: true)) else { return nil}
         return self.resize(image: image)

@@ -1,9 +1,3 @@
-//
-//  CameraModel.swift
-//  CustomCamera
-//
-//  Created by window1 on 3/29/24.
-//
 
 import Foundation
 import SwiftUI
@@ -18,6 +12,7 @@ class CameraModel: ObservableObject {
     @Published var showAlertError = false
     @Published var isFlashOn = false
     @Published var willCapturePhoto = false
+    @Published var isSilentModeOn = false
     
     var alertError: AlertError!
     
@@ -57,10 +52,12 @@ class CameraModel: ObservableObject {
     }
     
     func capturePhoto() {
+        print("Captured Photo")
         service.capturePhoto()
     }
     
     func flipCamera() {
+        print("Filp Camera")
         service.changeCamera()
     }
     
@@ -69,7 +66,10 @@ class CameraModel: ObservableObject {
     }
     
     func switchFlash() {
-        service.flashMode = service.flashMode == .on ? .off : .on
+        service.flashMode = (service.flashMode == .on ? .off : .on)
+    }
+    func switchShutterSound() {
+        isSilentModeOn.toggle()
     }
 }
 

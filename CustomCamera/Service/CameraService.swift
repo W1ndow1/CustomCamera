@@ -1,9 +1,3 @@
-//
-//  CameraService.swift
-//  CustomCamera
-//
-//  Created by window1 on 3/30/24.
-//
 
 import Foundation
 import AVFoundation
@@ -13,6 +7,7 @@ import UIKit
 public struct Photo: Identifiable, Equatable {
     public var id: String
     public var originData: Data
+    
     public init(id: String = UUID().uuidString, originData: Data) {
         self.id = id
         self.originData = originData
@@ -326,7 +321,12 @@ public class CameraService: ObservableObject {
             
             sessionQueue.async {
                 guard let photoOutputConnection = self.photoOutput.connection(with: .video) else { return }
-                photoOutputConnection.videoRotationAngle = 90
+                if #available(iOS 17.0, *) {
+                    photoOutputConnection.videoRotationAngle = 90
+                } else {
+                    // Fallback on earlier versions
+                    photoOutputConnection.videoOrientation = .portrait
+                }
                 var photoSettings = AVCapturePhotoSettings()
                 
                 if self.photoOutput.availablePhotoCodecTypes.contains(.hevc) {

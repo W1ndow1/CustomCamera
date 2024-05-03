@@ -1,9 +1,3 @@
-//
-//  CameraPreview.swift
-//  CustomCamera
-//
-//  Created by window1 on 4/5/24.
-//
 
 import SwiftUI
 import AVFoundation
@@ -27,9 +21,15 @@ struct CameraPreview: UIViewRepresentable {
     func makeUIView(context: Context) -> VideoPreviewView {
         let view = VideoPreviewView()
         view.backgroundColor = .black
+        view.videoPreviewLayer.videoGravity = .resizeAspectFill
         view.videoPreviewLayer.cornerRadius = 0
         view.videoPreviewLayer.session = session
-        view.videoPreviewLayer.connection?.videoRotationAngle = 90
+        if #available(iOS 17.0, *) {
+            view.videoPreviewLayer.connection?.videoRotationAngle = 90
+        } else {
+            // Fallback on earlier versions
+            view.videoPreviewLayer.connection?.videoOrientation = .portrait
+        }
         return view
     }
     

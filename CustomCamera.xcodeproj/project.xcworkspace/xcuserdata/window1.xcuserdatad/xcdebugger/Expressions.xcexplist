@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "View.viewToImage&lt;&#x3c4;_0_0&gt;(view:):CameraViewModel.swift">
+      </ContextState>
+      <ContextState
+         contextName = "CameraViewModel.capturePhoto():CameraViewModel.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "model">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in CameraViewModel.init():CameraViewModel.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in ContentView.captureButton.getter:ContentView.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
