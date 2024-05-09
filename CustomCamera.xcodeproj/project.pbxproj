@@ -11,7 +11,7 @@
 		A80EE4512BB6AB3000546B95 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80EE4502BB6AB3000546B95 /* ContentView.swift */; };
 		A80EE4532BB6AB3200546B95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A80EE4522BB6AB3200546B95 /* Assets.xcassets */; };
 		A80EE4572BB6AB3200546B95 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A80EE4562BB6AB3200546B95 /* Preview Assets.xcassets */; };
-		A80EE4612BB6B86000546B95 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80EE4602BB6B86000546B95 /* CameraModel.swift */; };
+		A83420712BECCF4200702514 /* PhotoCaptureDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83420702BECCF4200702514 /* PhotoCaptureDelegate.swift */; };
 		A83AE9C82BB841C0001BDBDB /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9C72BB841C0001BDBDB /* CameraService.swift */; };
 		A83AE9CA2BBFD6BD001BDBDB /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */; };
 		A83AE9CC2BC05134001BDBDB /* CameraServiceEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9CB2BC05134001BDBDB /* CameraServiceEnum.swift */; };
@@ -22,6 +22,7 @@
 		A87D924F2BDB502A00ECF0DD /* LensChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D924E2BDB502A00ECF0DD /* LensChangeView.swift */; };
 		A87D92512BE1364300ECF0DD /* WaterMarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D92502BE1364300ECF0DD /* WaterMarkView.swift */; };
 		A8FB50342BE48D8500D3A404 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FB50332BE48D8500D3A404 /* AppDelegate.swift */; };
+		A8FB50362BE62EAD00D3A404 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FB50352BE62EAD00D3A404 /* Camera.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,7 +32,7 @@
 		A80EE4522BB6AB3200546B95 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A80EE4542BB6AB3200546B95 /* CustomCamera.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CustomCamera.entitlements; sourceTree = "<group>"; };
 		A80EE4562BB6AB3200546B95 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		A80EE4602BB6B86000546B95 /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
+		A83420702BECCF4200702514 /* PhotoCaptureDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCaptureDelegate.swift; sourceTree = "<group>"; };
 		A83AE9C72BB841C0001BDBDB /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		A83AE9CB2BC05134001BDBDB /* CameraServiceEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraServiceEnum.swift; sourceTree = "<group>"; };
@@ -42,6 +43,7 @@
 		A87D924E2BDB502A00ECF0DD /* LensChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensChangeView.swift; sourceTree = "<group>"; };
 		A87D92502BE1364300ECF0DD /* WaterMarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterMarkView.swift; sourceTree = "<group>"; };
 		A8FB50332BE48D8500D3A404 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A8FB50352BE62EAD00D3A404 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,7 +99,6 @@
 		A80EE45D2BB6B78100546B95 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A80EE4602BB6B86000546B95 /* CameraModel.swift */,
 				A83AE9D32BCD0B25001BDBDB /* CameraViewModel.swift */,
 			);
 			path = Model;
@@ -121,6 +122,8 @@
 				A83AE9CD2BC05C41001BDBDB /* PhotoCature.swift */,
 				A83AE9CF2BC82987001BDBDB /* ImageResizer.swift */,
 				A8FB50332BE48D8500D3A404 /* AppDelegate.swift */,
+				A83420702BECCF4200702514 /* PhotoCaptureDelegate.swift */,
+				A8FB50352BE62EAD00D3A404 /* Camera.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8FB50342BE48D8500D3A404 /* AppDelegate.swift in Sources */,
+				A83420712BECCF4200702514 /* PhotoCaptureDelegate.swift in Sources */,
 				A87D92512BE1364300ECF0DD /* WaterMarkView.swift in Sources */,
 				A83AE9CE2BC05C41001BDBDB /* PhotoCature.swift in Sources */,
 				A83AE9CA2BBFD6BD001BDBDB /* CameraPreview.swift in Sources */,
@@ -215,7 +219,7 @@
 				A87D924F2BDB502A00ECF0DD /* LensChangeView.swift in Sources */,
 				A83AE9D42BCD0B25001BDBDB /* CameraViewModel.swift in Sources */,
 				A80EE44F2BB6AB3000546B95 /* CustomCameraApp.swift in Sources */,
-				A80EE4612BB6B86000546B95 /* CameraModel.swift in Sources */,
+				A8FB50362BE62EAD00D3A404 /* Camera.swift in Sources */,
 				A83AE9CC2BC05134001BDBDB /* CameraServiceEnum.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,6 +359,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "촬영한 사진을 저장하기 위해 권한 승인이 필요합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -366,7 +371,6 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -396,6 +400,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "촬영한 사진을 저장하기 위해 권한 승인이 필요합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -407,7 +412,6 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";

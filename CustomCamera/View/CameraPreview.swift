@@ -36,6 +36,8 @@ struct CameraPreview: UIViewRepresentable {
     func updateUIView(_ uiView: VideoPreviewView, context: Context) {
     }
     
+    
+    
 }
 
 #Preview {

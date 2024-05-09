@@ -3,9 +3,6 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "View.viewToImage&lt;&#x3c4;_0_0&gt;(view:):CameraViewModel.swift">
-      </ContextState>
-      <ContextState
          contextName = "CameraViewModel.capturePhoto():CameraViewModel.swift">
          <PersistentStrings>
             <PersistentString
@@ -14,7 +11,29 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "Camera.capturePhoto():Camera.swift">
+      </ContextState>
+      <ContextState
+         contextName = "View.viewToImage&lt;&#x3c4;_0_0&gt;(view:):CameraViewModel.swift">
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in CameraViewModel.init():CameraViewModel.swift">
+      </ContextState>
+      <ContextState
+         contextName = "Camera.switchToLens(position:):Camera.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "session">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Camera.toggleLivePhotoMode():Camera.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "photoSettings">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "closure #1 in ContentView.captureButton.getter:ContentView.swift">

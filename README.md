@@ -8,11 +8,11 @@
 
 3. AVCam: Building a Camera App - Sample Code
 https://developer.apple.com/documentation/avfoundation/capture_setup/avcam_building_a_camera_app
-- UIKit 카메라 기능 구성 및 샘플 참조 
+- UIKit 카메라 기능 및 구성
+- Flash light, LivePhoto, Video Photo 촬영 전환
  
 4. https://stackoverflow.com/questions/59140440/swiftui-disable-auto-rotation-of-views
 - 화면 회전 고정 및 아이콘 회전 
-
 
 5. https://www.hackingwithswift.com/quick-start/swiftui/how-to-convert-a-swiftui-view-to-an-image
    https://developer.apple.com/documentation/swiftui/imagerenderer

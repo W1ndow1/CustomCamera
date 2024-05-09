@@ -107,7 +107,7 @@ extension ContentView {
         Button(action: {
             simpleModel.switchLivePhoto()
         }, label: {
-            Image(systemName: simpleModel.isLivePhotoOn ? "livephoto.slash" : "livephoto")
+            Image(systemName: simpleModel.isLivePhotoOn ? "livephoto": "livephoto.slash")
                 .viewRotationEffect(deg: degToFaceUp)
                 .font(.system(size: 20, weight: .medium, design: .default))
                 .frame(width: 40)
@@ -194,12 +194,5 @@ extension ContentView {
         })
         .viewRotationEffect(deg: degToFaceUp)
         .disabled(simpleModel.shutterEffect)
-    }
-}
-
-extension View {
-    func viewRotationEffect(deg: Double) -> some View{
-        self.rotationEffect(Angle(degrees: deg))
-            .animation(.easeInOut(duration: 0.5), value: deg)
     }
 }

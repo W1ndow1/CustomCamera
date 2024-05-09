@@ -8,7 +8,7 @@ struct WaterMarkView: View {
         ZStack {
             Capsule()
                 .overlay {
-                    Text(model.waterMarkText)
+                    TextField("Name",text: $model.waterMarkText)
                         .foregroundStyle(.white)
                         .font(.system(size: 20, weight: .bold))
                 }

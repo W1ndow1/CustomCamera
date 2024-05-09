@@ -3,7 +3,7 @@
 import SwiftUI
 
 struct LensChangeView: View {
-    
+    @ObservedObject var model = CameraViewModel()
     var body: some View {
         ZStack {
             Capsule()
@@ -18,9 +18,10 @@ struct LensChangeView: View {
 }
 
 extension LensChangeView {
-    
     var ultraWideAngleLens: some View {
-        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+        Button(action:{
+            model.switchToLens(position: .builtInUltraWideCamera)
+        }, label: {
             Circle()
                 .frame(width: 50)
                 .foregroundStyle(.black.opacity(0.5))
@@ -32,7 +33,9 @@ extension LensChangeView {
     }
     
     var wideLens: some View {
-        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+        Button(action: {
+            model.switchToLens(position: .builtInWideAngleCamera)
+        }, label: {
             Circle()
                 .frame(width: 50)
                 .foregroundStyle(.black.opacity(0.5))
@@ -44,7 +47,9 @@ extension LensChangeView {
     }
     
     var telescopeLens: some View {
-        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+        Button(action: {
+            model.switchToLens(position: .builtInTelephotoCamera)
+        }, label: {
             Circle()
                 .frame(width: 50)
                 .foregroundStyle(.black.opacity(0.5))

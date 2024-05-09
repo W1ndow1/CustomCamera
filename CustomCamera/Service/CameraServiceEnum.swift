@@ -16,4 +16,13 @@ extension CameraService {
         case on
         case off
     }
+    
+    enum LivePhotoMode {
+        case on
+        case off
+    }
+    
+    enum CameraError: Error {
+        case configurationFailed
+    }
 }
