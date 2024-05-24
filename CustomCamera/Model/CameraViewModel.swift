@@ -37,7 +37,7 @@ class CameraViewModel: ObservableObject {
     
     
     func stopSession() {
-        
+        camera.stopCamera()
     }
     
     func switchToLens(position :AVCaptureDevice.DeviceType) {
