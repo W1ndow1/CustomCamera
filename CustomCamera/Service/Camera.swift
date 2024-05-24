@@ -1,7 +1,8 @@
-import Foundation
 import SwiftUI
 import UIKit
 import AVFoundation
+import Photos
+import CoreLocation
 
 
 class Camera: NSObject, ObservableObject {
@@ -16,7 +17,12 @@ class Camera: NSObject, ObservableObject {
     var photoSettings: AVCapturePhotoSettings!
     var isSilentModeOn = false
     var photoQualityPrioritizationMode: AVCapturePhotoOutput.QualityPrioritization = .balanced
-
+    let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInUltraWideCamera, .builtInWideAngleCamera, .builtInTelephotoCamera], mediaType: .video, position: .back)
+    let sessionQueue = DispatchQueue(label: "session queue")
+    var inProgressPhotoCaptrueDelegates = [Int64: PhotoCaptureProcessorDelegate]()
+    var livePhotoCompanionMovieURL: URL?
+    let locationManger = CLLocationManager()
+    
     @Published var recentImage: UIImage?
     @Published var isCameraBusy = false
     
@@ -25,17 +31,33 @@ class Camera: NSObject, ObservableObject {
     }
     
     func toggleLivePhotoMode() {
-        photoSettings = setUpPhotoSettings()
+        sessionQueue.async {
+            let photoSettings = self.setUpPhotoSettings()
+            DispatchQueue.main.async {
+                self.photoSettings = photoSettings
+                self.didFinish()
+            }
+        }
     }
     
+    func startCamera() {
+        session.startRunning()
+    }
+    
+    func stopCamera() {
+        session.stopRunning()
+    }
     
     func setupCamera() {
+    
+        if locationManger.authorizationStatus == .notDetermined {
+            locationManger.requestWhenInUseAuthorization()
+        }
+    
         session.beginConfiguration()
         session.sessionPreset = .photo
         
         //Add Video input Device
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInUltraWideCamera, .builtInWideAngleCamera, .builtInTelephotoCamera], mediaType: .video, position: .back)
-        
         for device in deviceDiscoverySession.devices {
             if device.deviceType == .builtInWideAngleCamera {
                 videoDeviceInput = try? AVCaptureDeviceInput(device: device)
@@ -66,12 +88,10 @@ class Camera: NSObject, ObservableObject {
             session.addOutput(photoOutput)
             photoOutput.isLivePhotoCaptureEnabled = photoOutput.isLivePhotoCaptureSupported
             photoOutput.maxPhotoQualityPrioritization = .quality
-            livePhotoMode = photoOutput.isLivePhotoCaptureSupported ? .on :.off
             self.configurePhotoOutput()
         }
         session.commitConfiguration()
         session.startRunning()
-        
     }
     
     func configurePhotoOutput()  {
@@ -127,8 +147,6 @@ class Camera: NSObject, ObservableObject {
         return livePhotoMovieURL
     }
     
-    
-    
     func requestAndCheckPermission() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .notDetermined:
@@ -151,19 +169,35 @@ class Camera: NSObject, ObservableObject {
     
     func capturePhoto() {
         if self.photoSettings == nil {
-            print("No photoSettings to capture")
+            print("No photo settings to capture")
             return
         }
-
         let photoSettings = AVCapturePhotoSettings(from: self.photoSettings)
-        
         if photoSettings.livePhotoMovieFileURL != nil {
             photoSettings.livePhotoMovieFileURL = livePhotoMovieUniqueTemporaryDirectoryFileURL()
         }
-        photoSettings.flashMode = self.flashMode
-        photoSettings.photoQualityPrioritization = .quality
-        self.photoOutput.capturePhoto(with: photoSettings, delegate: self)
-    }
+        
+        sessionQueue.async {
+            //photoCaptureProcessor를 delegate를 사용해서 할 때 이용하기
+            /*
+            photoSettings.flashMode = self.flashMode
+            photoSettings.photoQualityPrioritization = .quality
+
+            let photoCaptureProcessor = PhotoCaptureProcessorDelegate(with: photoSettings,
+                                                                      willCapturePhotoAnimation: {},
+                                                                      livePhotoCaptureHandler: { capturing in },
+                                                                      completionHandler: { photoProcessor in
+                self.sessionQueue.async {
+                    self.inProgressPhotoCaptrueDelegates[photoProcessor.requestPhotoSettings.uniqueID] = nil
+                }
+            })
+            photoCaptureProcessor.location = self.locationManger.location
+
+            self.inProgressPhotoCaptrueDelegates[photoSettings.uniqueID] = photoCaptureProcessor
+            */
+            self.photoOutput.capturePhoto(with: photoSettings, delegate: self)
+        }
+    } 
     
     func savePhoto(_ imageData: Data) {
         let waterMark = self.waterMark
@@ -189,50 +223,52 @@ class Camera: NSObject, ObservableObject {
     }
     
     func flipCamera() {
-        let currentDevicePosition = self.videoDeviceInput.device.position
-        let changedDevicePosition: AVCaptureDevice.Position
-        
-        switch currentDevicePosition {
-        case .unspecified, .front :
-            changedDevicePosition = .back
-        case .back :
-            changedDevicePosition = .front
-        default:
-            changedDevicePosition = .back
-        }
-        
-        if let videoDevice = AVCaptureDevice
-            .default(.builtInWideAngleCamera, for: .video, position: changedDevicePosition) {
-            do {
-                let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
-                self.session.beginConfiguration()
-                
-                //Sesssion에서 기존 장치정보 정보 지우기
-                if let inputs = session.inputs as? [AVCaptureDeviceInput] {
-                    for input in inputs {
-                        self.session.removeInput(input)
+        sessionQueue.async {
+            let currentDevicePosition = self.videoDeviceInput.device.position
+            let changedDevicePosition: AVCaptureDevice.Position
+            
+            switch currentDevicePosition {
+            case .unspecified, .front :
+                changedDevicePosition = .back
+            case .back :
+                changedDevicePosition = .front
+            default:
+                changedDevicePosition = .back
+            }
+            
+            if let videoDevice = AVCaptureDevice
+                .default(.builtInWideAngleCamera, for: .video, position: changedDevicePosition) {
+                do {
+                    let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
+                    self.session.beginConfiguration()
+                    
+                    //Sesssion에서 기존 장치정보 정보 지우기
+                    if let inputs = self.session.inputs as? [AVCaptureDeviceInput] {
+                        for input in inputs {
+                            self.session.removeInput(input)
+                        }
                     }
-                }
-                
-                //새로운 장치 정보 넣기
-                if self.session.canAddInput(videoDeviceInput) {
-                    self.session.addInput(videoDeviceInput)
-                    self.videoDeviceInput = videoDeviceInput
-                } else {
-                    self.session.addInput(self.videoDeviceInput)
-                }
-                
-                if let connection = self.photoOutput.connection(with: .video) {
-                    session.sessionPreset = .high
-                    if connection.isVideoStabilizationSupported {
-                        connection.preferredVideoStabilizationMode = .auto
+                    
+                    //새로운 장치 정보 넣기
+                    if self.session.canAddInput(videoDeviceInput) {
+                        self.session.addInput(videoDeviceInput)
+                        self.videoDeviceInput = videoDeviceInput
+                    } else {
+                        self.session.addInput(self.videoDeviceInput)
                     }
+                    
+                    if let connection = self.photoOutput.connection(with: .video) {
+                        self.session.sessionPreset = .high
+                        if connection.isVideoStabilizationSupported {
+                            connection.preferredVideoStabilizationMode = .auto
+                        }
+                    }
+                    self.photoOutput.maxPhotoQualityPrioritization = .quality
+                    self.session.commitConfiguration()
+                    
+                } catch {
+                    print("Error occurred: \(error)")
                 }
-                photoOutput.maxPhotoQualityPrioritization = .quality
-                self.session.commitConfiguration()
-                
-            } catch {
-                print("Error occurred: \(error)")
             }
         }
     }
@@ -254,6 +290,17 @@ class Camera: NSObject, ObservableObject {
         session.commitConfiguration()
     }
     
+    func didFinish() {
+        if let livePhotoCompanionMoviePath = livePhotoCompanionMovieURL?.path {
+            if FileManager.default.fileExists(atPath: livePhotoCompanionMoviePath) {
+                do {
+                    try FileManager.default.removeItem(atPath: livePhotoCompanionMoviePath)
+                } catch {
+                    print("파일을 지울 수 없습니다. \(livePhotoCompanionMoviePath)")
+                }
+            }
+        }
+    }
 }
 
 extension Camera: AVCapturePhotoCaptureDelegate {
@@ -274,18 +321,9 @@ extension Camera: AVCapturePhotoCaptureDelegate {
     }
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
-        guard let imageData = photo.fileDataRepresentation() else { return }
-        self.recentImage = UIImage(data: imageData)
-        self.savePhoto(imageData)
-        self.isCameraBusy = false
-    }
-    
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishRecordingLivePhotoMovieForEventualFileAt outputFileURL: URL, resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        
-    }
-    
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingLivePhotoToMovieFileAt outputFileURL: URL, duration: CMTime, photoDisplayTime: CMTime, resolvedSettings: AVCaptureResolvedPhotoSettings, error: (any Error)?) {
-        
+        self.photoData = photo.fileDataRepresentation()
+        //guard let image = photo.fileDataRepresentation() else { return }
+        //self.savePhoto(imageData)
     }
     
     @available(iOS 17.0, *)
@@ -296,43 +334,73 @@ extension Camera: AVCapturePhotoCaptureDelegate {
         }
         self.photoData = deferredPhotoProxy?.fileDataRepresentation()
     }
-}
-
-extension UIImage {
-    func overlayWith(image: UIImage) -> UIImage? {
-        let newSize = CGSize(width: size.width, height: size.height)
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+    
+    //라이브포토 레코딩이 끝남
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishRecordingLivePhotoMovieForEventualFileAt outputFileURL: URL, resolvedSettings: AVCaptureResolvedPhotoSettings) {
         
-        draw(in: CGRect(origin: .zero, size: size))
-        image.draw(in: CGRect(origin: CGPoint(x: size.width - 700, y: size.height - 1200), size: .init(width: 300, height: 150)))
-        
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage
     }
     
-}
-
-extension View {
-    func viewToImage(view: some View) -> UIImage? {
-        var image = UIImage()
-        let controller = UIHostingController(rootView: view)
-        controller.view.frame = CGRect(x: 0, y: CGFloat(Int.max), width: 1, height: 1)
-        if let view = controller.view {
-            let contentSize = view.intrinsicContentSize
-            view.bounds = CGRect(origin: .zero, size: contentSize)
-            view.backgroundColor = .clear
-            view.sizeToFit()
-            let renderer = UIGraphicsImageRenderer(size: contentSize)
-            image = renderer.image { _ in
-                view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+    //라이브포토 프로세싱 끝남
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingLivePhotoToMovieFileAt outputFileURL: URL, duration: CMTime, photoDisplayTime: CMTime, resolvedSettings: AVCaptureResolvedPhotoSettings, error: (any Error)?) {
+        if error != nil {
+            print("Error processing Live Photo companion movie \(String(describing: error))")
+            return
+        }
+        livePhotoCompanionMovieURL = outputFileURL
+    }
+    //캡쳐 끝나고 저장하기
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: (any Error)?) {
+        if let error = error {
+            print("Error Capturing photo: \(error)")
+            didFinish()
+            return
+        }
+        
+        guard photoData != nil else {
+            print("No photo data resource")
+            didFinish()
+            return
+        }
+        PHPhotoLibrary.requestAuthorization { status in
+            if status == .authorized {
+                PHPhotoLibrary.shared().performChanges {
+                    //일반 사진 저장
+                    let options = PHAssetResourceCreationOptions()
+                    let createRequest = PHAssetCreationRequest.forAsset()
+                    options.uniformTypeIdentifier = self.photoSettings.processedFileType.map {
+                        $0.rawValue
+                    }
+                    var resourceType = PHAssetResourceType.photo
+                    if resolvedSettings.deferredPhotoProxyDimensions.width > 0 && resolvedSettings.deferredPhotoProxyDimensions.height > 0 {
+                        resourceType = PHAssetResourceType.photoProxy
+                    }
+                    createRequest.addResource(with: resourceType, data: self.photoData!, options: options)
+                    createRequest.location = self.locationManger.location
+                    
+                    //라이브포토 사진 저장
+                    if let livePhotoCompanionMovieURL = self.livePhotoCompanionMovieURL, self.livePhotoMode == .on {
+                        let livePhotoCompanionMovieFileOption = PHAssetResourceCreationOptions()
+                        livePhotoCompanionMovieFileOption.shouldMoveFile = true
+                        createRequest.addResource(with: .pairedVideo, fileURL: livePhotoCompanionMovieURL, options: livePhotoCompanionMovieFileOption)
+                    }
+                } completionHandler: { success, error in
+                    if let error = error {
+                        print("Photo Library에 저장하는 도중 에러가 발생했습니다. \(error)")
+                    } else {
+                        print("저장 성공:\(success)")
+                    }
+                    self.didFinish()
+                }
+                //사진 썸네일처리
+                DispatchQueue.main.async {
+                    self.recentImage = UIImage(data: self.photoData!)
+                    self.isCameraBusy = false
+                }
+            } else {
+                self.didFinish()
             }
         }
-        return image
-    }
-    
-    func viewRotationEffect(deg: Double) -> some View{
-        self.rotationEffect(Angle(degrees: deg))
-            .animation(.easeInOut(duration: 0.5), value: deg)
     }
 }
+
+

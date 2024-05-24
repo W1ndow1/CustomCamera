@@ -15,6 +15,9 @@ struct ContentView: View {
                     .onAppear() {
                         simpleModel.configure()
                     }
+                    .onDisappear() {
+                        
+                    }
                     .gesture(MagnifyGesture()
                         .onChanged { val in
                             simpleModel.zoom(factor: val.magnification)
@@ -28,6 +31,9 @@ struct ContentView: View {
                 simpleModel.cameraPreview.ignoresSafeArea()
                     .onAppear() {
                         simpleModel.configure()
+                    }
+                    .onDisappear() {
+                        
                     }
                     .gesture(MagnificationGesture()
                         .onChanged { value in

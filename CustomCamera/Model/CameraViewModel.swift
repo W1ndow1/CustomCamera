@@ -8,6 +8,7 @@ class CameraViewModel: ObservableObject {
     
     private let camera: Camera
     private let session: AVCaptureSession
+    private let sessionQueue = DispatchQueue(label: "session queue")
     private var subscriptions = Set<AnyCancellable>()
     private var isCameraBusy = false
     let cameraPreview: AnyView
@@ -23,11 +24,20 @@ class CameraViewModel: ObservableObject {
     @Published var isLivePhotoOn = false
     @Published var shutterEffect = false
     @Published var imageSelection: PhotosPickerItem? = nil
-    @Published var isWaterMarkOn = true
+    @Published var isWaterMarkOn = false
     @Published var waterMarkText = ""
     
     func configure() {
         camera.requestAndCheckPermission()
+    }
+    
+    func startSession() {
+        camera.startCamera()
+    }
+    
+    
+    func stopSession() {
+        
     }
     
     func switchToLens(position :AVCaptureDevice.DeviceType) {
@@ -57,6 +67,7 @@ class CameraViewModel: ObservableObject {
     }
     
     func capturePhoto() {
+        camera.capturePhoto()
         if isCameraBusy == false {
             hapticImpact.impactOccurred()
             withAnimation(.easeInOut(duration: 0.1)) {
@@ -67,7 +78,6 @@ class CameraViewModel: ObservableObject {
                     self.shutterEffect = false
                 }
             }
-            camera.capturePhoto()
             
         } else {
             print("Camera is Busy")

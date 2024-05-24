@@ -8,6 +8,7 @@
 import SwiftUI
 
 @main
+
 struct CustomCameraApp: App {
     @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @State private var degToFaceUp: Double = 0

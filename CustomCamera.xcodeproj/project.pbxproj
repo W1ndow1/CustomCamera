@@ -21,6 +21,7 @@
 		A83AE9D42BCD0B25001BDBDB /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9D32BCD0B25001BDBDB /* CameraViewModel.swift */; };
 		A87D924F2BDB502A00ECF0DD /* LensChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D924E2BDB502A00ECF0DD /* LensChangeView.swift */; };
 		A87D92512BE1364300ECF0DD /* WaterMarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D92502BE1364300ECF0DD /* WaterMarkView.swift */; };
+		A885D9732BFB45DB0072D73B /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A885D9722BFB45DB0072D73B /* Extension.swift */; };
 		A8FB50342BE48D8500D3A404 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FB50332BE48D8500D3A404 /* AppDelegate.swift */; };
 		A8FB50362BE62EAD00D3A404 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FB50352BE62EAD00D3A404 /* Camera.swift */; };
 /* End PBXBuildFile section */
@@ -42,6 +43,7 @@
 		A83AE9D32BCD0B25001BDBDB /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		A87D924E2BDB502A00ECF0DD /* LensChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensChangeView.swift; sourceTree = "<group>"; };
 		A87D92502BE1364300ECF0DD /* WaterMarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterMarkView.swift; sourceTree = "<group>"; };
+		A885D9722BFB45DB0072D73B /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		A8FB50332BE48D8500D3A404 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8FB50352BE62EAD00D3A404 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,11 +121,12 @@
 			children = (
 				A83AE9C72BB841C0001BDBDB /* CameraService.swift */,
 				A83AE9CB2BC05134001BDBDB /* CameraServiceEnum.swift */,
-				A83AE9CD2BC05C41001BDBDB /* PhotoCature.swift */,
 				A83AE9CF2BC82987001BDBDB /* ImageResizer.swift */,
+				A83AE9CD2BC05C41001BDBDB /* PhotoCature.swift */,
 				A8FB50332BE48D8500D3A404 /* AppDelegate.swift */,
 				A83420702BECCF4200702514 /* PhotoCaptureDelegate.swift */,
 				A8FB50352BE62EAD00D3A404 /* Camera.swift */,
+				A885D9722BFB45DB0072D73B /* Extension.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -217,6 +220,7 @@
 				A80EE4512BB6AB3000546B95 /* ContentView.swift in Sources */,
 				A83AE9D02BC82987001BDBDB /* ImageResizer.swift in Sources */,
 				A87D924F2BDB502A00ECF0DD /* LensChangeView.swift in Sources */,
+				A885D9732BFB45DB0072D73B /* Extension.swift in Sources */,
 				A83AE9D42BCD0B25001BDBDB /* CameraViewModel.swift in Sources */,
 				A80EE44F2BB6AB3000546B95 /* CustomCameraApp.swift in Sources */,
 				A8FB50362BE62EAD00D3A404 /* Camera.swift in Sources */,
@@ -359,6 +363,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "촬영 위치를 기록하기 위해 권한승인이 필요합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "촬영한 사진을 저장하기 위해 권한 승인이 필요합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -371,7 +376,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -400,6 +405,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "촬영 위치를 기록하기 위해 권한승인이 필요합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "촬영을 위해 권한 승인이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "촬영한 사진을 저장하기 위해 권한 승인이 필요합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -412,7 +418,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
