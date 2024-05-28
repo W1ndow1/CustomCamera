@@ -63,14 +63,14 @@ struct ContentView: View {
                 Text(zoomValue)
                     .foregroundStyle(.yellow)
                     .viewRotationEffect(deg: degToFaceUp)
-                LensChangeView()
+                LensChangeView(model: simpleModel)
                     .overlay {
                         HStack(spacing: 25) {
-                            LensChangeView().ultraWideAngleLens
+                            LensChangeView(model: simpleModel).ultraWideAngleLens
                                 .viewRotationEffect(deg: degToFaceUp)
-                            LensChangeView().wideLens
+                            LensChangeView(model: simpleModel).wideLens
                                 .viewRotationEffect(deg: degToFaceUp)
-                            LensChangeView().telescopeLens
+                            LensChangeView(model: simpleModel).telescopeLens
                                 .viewRotationEffect(deg: degToFaceUp)
                         }
                     }

@@ -242,7 +242,7 @@ class Camera: NSObject, ObservableObject {
                     let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
                     self.session.beginConfiguration()
                     
-                    //Sesssion에서 기존 장치정보 정보 지우기
+                    //Session에서 기존 장치정보 정보 지우기
                     if let inputs = self.session.inputs as? [AVCaptureDeviceInput] {
                         for input in inputs {
                             self.session.removeInput(input)
@@ -274,20 +274,51 @@ class Camera: NSObject, ObservableObject {
     }
     
     func switchToLens(position: AVCaptureDevice.DeviceType) {
-        session.beginConfiguration()
-        guard let currentInputs = session.inputs as? [AVCaptureDeviceInput] else { return }
-        for input in currentInputs {
-            self.session.removeInput(input)
-        }
-        
-        let deviceDescoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [position], mediaType: .video, position: .back)
-        if let device = deviceDescoverySession.devices.first,
-           let newInput = try? AVCaptureDeviceInput(device: device) {
-            if session.canAddInput(newInput) {
-                session.addInput(newInput)
+        sessionQueue.async {
+            guard let currentPosition = self.videoDeviceInput?.device.position else { return }
+            let preferredPosition: AVCaptureDevice.Position
+            
+            switch currentPosition {
+            case .unspecified, .front:
+                preferredPosition = .back
+            case .back:
+                preferredPosition = .back
+            default:
+                preferredPosition = .back
+            }
+            guard let videoDevice = AVCaptureDevice.default(position, for: .video, position: preferredPosition) else { return }
+            
+            do {
+                let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
+                self.session.beginConfiguration()
+                
+                //Session에서 기존 장치정보 정보 지우기
+                if let inputs = self.session.inputs as? [AVCaptureDeviceInput] {
+                    for input in inputs {
+                        self.session.removeInput(input)
+                    }
+                }
+                
+                //새로운 장치 정보 넣기
+                if self.session.canAddInput(videoDeviceInput) {
+                    self.session.addInput(videoDeviceInput)
+                    self.videoDeviceInput = videoDeviceInput
+                } else {
+                    self.session.addInput(self.videoDeviceInput)
+                }
+                if let connection = self.photoOutput.connection(with: .video) {
+                    self.session.sessionPreset = .high
+                    if connection.isVideoStabilizationSupported {
+                        connection.preferredVideoStabilizationMode = .auto
+                    }
+                }
+                self.photoOutput.maxPhotoQualityPrioritization = .quality
+                self.session.commitConfiguration()
+            }
+            catch {
+                print("Error to SwitchToLens \(error.localizedDescription)")
             }
         }
-        session.commitConfiguration()
     }
     
     func didFinish() {

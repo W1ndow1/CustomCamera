@@ -3,7 +3,7 @@
 import SwiftUI
 
 struct LensChangeView: View {
-    @State var model = CameraViewModel()
+    @ObservedObject var model: CameraViewModel
     var body: some View {
         ZStack {
             Capsule()
@@ -14,7 +14,7 @@ struct LensChangeView: View {
 }
 
 #Preview {
-    LensChangeView()
+    LensChangeView(model: .init())
 }
 
 extension LensChangeView {
