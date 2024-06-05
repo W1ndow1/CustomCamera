@@ -26,6 +26,7 @@ extension UIImage {
 }
 
 extension View {
+    
     func viewToImage(view: some View) -> UIImage? {
         var image = UIImage()
         let controller = UIHostingController(rootView: view)

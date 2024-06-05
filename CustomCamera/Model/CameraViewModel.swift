@@ -11,7 +11,7 @@ class CameraViewModel: ObservableObject {
     private let sessionQueue = DispatchQueue(label: "session queue")
     private var subscriptions = Set<AnyCancellable>()
     private var isCameraBusy = false
-    let cameraPreview: AnyView
+    let cameraPreview: CameraPreview
     let hapticImpact = UIImpactFeedbackGenerator()
     
     var currentZoomValue: CGFloat = 1.0
@@ -102,14 +102,18 @@ class CameraViewModel: ObservableObject {
         lastZoomValue = 1.0
     }
     
-    func sendWaterMarkImage(mark: UIImage) {
+    func sendWaterMarkImage(_ mark: UIImage) {
         camera.waterMarkReceive(image: mark)
+    }
+    
+    func focusAndExposeTap(_ devicePoint: CGPoint) {
+        camera.focus(with: .autoFocus, exposureMode: .autoExpose, at: devicePoint, monitorSubjectAreaChange: true)
     }
     
     init() {
         self.camera = Camera()
         session = camera.session
-        cameraPreview = AnyView(CameraPreview(session: session))
+        cameraPreview = CameraPreview(session: session)
         
         camera.$recentImage.sink { [weak self] capturePhoto in
             guard let pic = capturePhoto else { return }
@@ -124,7 +128,7 @@ class CameraViewModel: ObservableObject {
         
         $waterMarkImage
             .sink { [weak self] updateData in
-                self?.sendWaterMarkImage(mark: updateData ?? UIImage())
+                self?.sendWaterMarkImage(updateData ?? UIImage())
             }
             .store(in: &subscriptions)
     }

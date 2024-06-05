@@ -5,7 +5,7 @@ import Photos
 import CoreLocation
 
 
-class Camera: NSObject, ObservableObject {
+class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinatorDelegate {
     
     var session = AVCaptureSession()
     var videoDeviceInput: AVCaptureDeviceInput!
@@ -22,6 +22,11 @@ class Camera: NSObject, ObservableObject {
     var inProgressPhotoCaptrueDelegates = [Int64: PhotoCaptureProcessorDelegate]()
     var livePhotoCompanionMovieURL: URL?
     let locationManger = CLLocationManager()
+    var previewView = CameraPreview.VideoPreviewView()
+    var photoOuputReadinessCoordinator: AVCapturePhotoOutputReadinessCoordinator!
+    
+    private var videoDeviceRotationCoordinator: AVCaptureDevice.RotationCoordinator!
+    private var videoRotationAngleForHorizonLevelPreviewObservation: NSKeyValueObservation?
     
     @Published var recentImage: UIImage?
     @Published var isCameraBusy = false
@@ -49,14 +54,13 @@ class Camera: NSObject, ObservableObject {
     }
     
     func setupCamera() {
-    
+        
         if locationManger.authorizationStatus == .notDetermined {
             locationManger.requestWhenInUseAuthorization()
         }
-    
         session.beginConfiguration()
         session.sessionPreset = .photo
-        
+    
         //Add Video input Device
         for device in deviceDiscoverySession.devices {
             if device.deviceType == .builtInWideAngleCamera {
@@ -66,8 +70,11 @@ class Camera: NSObject, ObservableObject {
         }
         if session.canAddInput(videoDeviceInput) {
             session.addInput(videoDeviceInput)
+            self.createDeviceRotationCoordinator()
         } else {
             print("비디오 장치를 추가 할 수 없습니다.")
+            session.commitConfiguration()
+            return
         }
         
         //Add Audio input Device
@@ -83,12 +90,19 @@ class Camera: NSObject, ObservableObject {
             print(error.localizedDescription)
         }
         
-        //Add the photo output
+        //Add the photoOutput
         if session.canAddOutput(photoOutput) {
             session.addOutput(photoOutput)
             photoOutput.isLivePhotoCaptureEnabled = photoOutput.isLivePhotoCaptureSupported
             photoOutput.maxPhotoQualityPrioritization = .quality
             self.configurePhotoOutput()
+            
+            let readinessCoordinator = AVCapturePhotoOutputReadinessCoordinator(photoOutput: photoOutput)
+            DispatchQueue.main.async {
+                self.photoOuputReadinessCoordinator = readinessCoordinator
+                readinessCoordinator.delegate = self
+            }
+            
         }
         session.commitConfiguration()
         session.startRunning()
@@ -167,17 +181,28 @@ class Camera: NSObject, ObservableObject {
         }
     }
     
+
+    
     func capturePhoto() {
         if self.photoSettings == nil {
             print("No photo settings to capture")
             return
         }
+        self.photoOuputReadinessCoordinator.startTrackingCaptureRequest(using: photoSettings)
+        
+        let videoRotationAngle = self.videoDeviceRotationCoordinator.videoRotationAngleForHorizonLevelCapture
+        
         let photoSettings = AVCapturePhotoSettings(from: self.photoSettings)
         if photoSettings.livePhotoMovieFileURL != nil {
             photoSettings.livePhotoMovieFileURL = livePhotoMovieUniqueTemporaryDirectoryFileURL()
         }
         
         sessionQueue.async {
+            if let photoOuputConnection = self.photoOutput.connection(with: .video) {
+                photoOuputConnection.videoRotationAngle = videoRotationAngle
+            }
+            
+            
             //photoCaptureProcessor를 delegate를 사용해서 할 때 이용하기
             /*
             photoSettings.flashMode = self.flashMode
@@ -303,16 +328,24 @@ class Camera: NSObject, ObservableObject {
                 if self.session.canAddInput(videoDeviceInput) {
                     self.session.addInput(videoDeviceInput)
                     self.videoDeviceInput = videoDeviceInput
+                    
+                    //화면 회전 확인
+                    DispatchQueue.main.async {
+                        self.createDeviceRotationCoordinator()
+                    }
+                    
                 } else {
                     self.session.addInput(self.videoDeviceInput)
                 }
+                
                 if let connection = self.photoOutput.connection(with: .video) {
-                    self.session.sessionPreset = .high
+                    self.session.sessionPreset = .photo
                     if connection.isVideoStabilizationSupported {
                         connection.preferredVideoStabilizationMode = .auto
                     }
                 }
                 self.photoOutput.maxPhotoQualityPrioritization = .quality
+                self.configurePhotoOutput()
                 self.session.commitConfiguration()
             }
             catch {
@@ -329,6 +362,40 @@ class Camera: NSObject, ObservableObject {
                 } catch {
                     print("파일을 지울 수 없습니다. \(livePhotoCompanionMoviePath)")
                 }
+            }
+        }
+    }
+    
+    
+    func createDeviceRotationCoordinator() {
+        videoDeviceRotationCoordinator = AVCaptureDevice.RotationCoordinator(device: videoDeviceInput.device, previewLayer: previewView.videoPreviewLayer)
+        previewView.videoPreviewLayer.connection?.videoRotationAngle = videoDeviceRotationCoordinator.videoRotationAngleForHorizonLevelPreview
+        videoRotationAngleForHorizonLevelPreviewObservation = videoDeviceRotationCoordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: .new) { _, change in
+            guard let videoRotationAngleForHorizonLevelPreview = change.newValue else { return }
+            self.previewView.videoPreviewLayer.connection?.videoRotationAngle = videoRotationAngleForHorizonLevelPreview
+        }
+    }
+    
+    func focus(with focusMode: AVCaptureDevice.FocusMode, exposureMode: AVCaptureDevice.ExposureMode, at devicePoint: CGPoint, monitorSubjectAreaChange: Bool) {
+        sessionQueue.async {
+            let device = self.videoDeviceInput.device
+            do {
+                try device.lockForConfiguration()
+                //초점설정
+                if device.isFocusPointOfInterestSupported && device.isFocusModeSupported(focusMode) {
+                    device.focusPointOfInterest = devicePoint
+                    device.focusMode = focusMode
+                }
+                //노출설정
+                if device.isExposurePointOfInterestSupported && device.isExposureModeSupported(exposureMode) {
+                    device.exposurePointOfInterest = devicePoint
+                    device.exposureMode = exposureMode
+                }
+                device.isSubjectAreaChangeMonitoringEnabled = monitorSubjectAreaChange
+                device.unlockForConfiguration()
+                
+            } catch {
+                print("장치의 초점에 접근할 수 없습니다. \(error.localizedDescription)")
             }
         }
     }

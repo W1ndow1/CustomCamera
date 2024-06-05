@@ -13,6 +13,8 @@ struct CameraPreview: UIViewRepresentable {
             return layer as! AVCaptureVideoPreviewLayer
         }
         
+        
+        
     }
     
     var session: AVCaptureSession

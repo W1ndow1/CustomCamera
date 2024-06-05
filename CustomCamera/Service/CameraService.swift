@@ -87,7 +87,7 @@ public class CameraService: ObservableObject {
             self.configureSession()
         }
     }
-    //MARK: - 권환학인
+    
     public func checkPermission() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:

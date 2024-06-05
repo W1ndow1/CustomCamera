@@ -6,6 +6,9 @@ import PhotosUI
 struct ContentView: View {
     @StateObject var simpleModel = CameraViewModel()
     @State var zoomValue: String = "0.0"
+    @State var showFocusIndicator = false
+    @State var focustPoint: CGPoint? = nil
+    @State var focusIndicatorColor: Color = .yellow
     var degToFaceUp: Double
     
     var body: some View {
@@ -22,11 +25,24 @@ struct ContentView: View {
                         .onChanged { val in
                             simpleModel.zoom(factor: val.magnification)
                             zoomValue = String(describing: round(val.magnification))
+                            
                         }
                         .onEnded { _ in
                             simpleModel.zoomInitialize()
                         }
                     )
+                    .onTapGesture { location in
+                        //포인터 정보 전달
+                        let screenSize = UIScreen.main.bounds.size
+                        let focusPoint = CGPoint(x: location.x / screenSize.width, y: location.y / screenSize.height)
+                        simpleModel.focusAndExposeTap(focusPoint)
+                        //화면에 포인터 표시
+                        self.focustPoint = location
+                        self.showFocusIndicator = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                            self.showFocusIndicator = false
+                        }
+                    }
             } else {
                 simpleModel.cameraPreview.ignoresSafeArea()
                     .onAppear() {
@@ -44,6 +60,13 @@ struct ContentView: View {
                         }
                     )
             }
+            if let focustPoint = focustPoint, showFocusIndicator {
+                focusIndicatorButton
+                    .position(focustPoint)
+                    .transition(.opacity)
+            }
+            
+            
             VStack {
                 HStack(spacing: 70){
                     silentShutterButton
@@ -95,6 +118,15 @@ struct ContentView: View {
 }
 
 extension ContentView {
+    
+    var focusIndicatorButton: some View {
+        Button(action: {}, label: {
+            Image(systemName: "circle.circle")
+                .font(.system(size: 60, weight: .medium))
+        })
+        .foregroundStyle(focusIndicatorColor)
+    }
+    
     
     var waterMarkButton: some View {
         Button(action: {
