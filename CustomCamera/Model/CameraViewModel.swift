@@ -41,7 +41,6 @@ class CameraViewModel: ObservableObject {
     }
     
     func switchToLens(position :AVCaptureDevice.DeviceType) {
-        print("\(position.rawValue)로 변경합니다.")
         camera.switchToLens(position: position)
         
     }

@@ -8,17 +8,12 @@ struct CameraPreview: UIViewRepresentable {
         override class var layerClass: AnyClass {
             AVCaptureVideoPreviewLayer.self
         }
-        
         var videoPreviewLayer: AVCaptureVideoPreviewLayer {
             return layer as! AVCaptureVideoPreviewLayer
         }
-        
-        
-        
     }
     
     var session: AVCaptureSession
-    
     
     func makeUIView(context: Context) -> VideoPreviewView {
         let view = VideoPreviewView()
@@ -37,9 +32,6 @@ struct CameraPreview: UIViewRepresentable {
     
     func updateUIView(_ uiView: VideoPreviewView, context: Context) {
     }
-    
-    
-    
 }
 
 #Preview {

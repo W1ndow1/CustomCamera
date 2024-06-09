@@ -13,7 +13,7 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
     var photoData: Data?
     var waterMark: UIImage?
     var flashMode: AVCaptureDevice.FlashMode = .off
-    var livePhotoMode: CameraService.LivePhotoMode = .off
+    var livePhotoMode: LivePhotoMode = .off
     var photoSettings: AVCapturePhotoSettings!
     var isSilentModeOn = false
     var photoQualityPrioritizationMode: AVCapturePhotoOutput.QualityPrioritization = .balanced
@@ -23,15 +23,15 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
     var livePhotoCompanionMovieURL: URL?
     let locationManger = CLLocationManager()
     var previewView = CameraPreview.VideoPreviewView()
-    var photoOuputReadinessCoordinator: AVCapturePhotoOutputReadinessCoordinator!
     
+    var photoOuputReadinessCoordinator: AVCapturePhotoOutputReadinessCoordinator!
     private var videoDeviceRotationCoordinator: AVCaptureDevice.RotationCoordinator!
     private var videoRotationAngleForHorizonLevelPreviewObservation: NSKeyValueObservation?
     
     @Published var recentImage: UIImage?
     @Published var isCameraBusy = false
-    
-    func waterMarkReceive(image: UIImage?) {
+
+    func waterMarkReceive(image: UIImage) {
         self.waterMark = image
     }
     
@@ -54,7 +54,6 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
     }
     
     func setupCamera() {
-        
         if locationManger.authorizationStatus == .notDetermined {
             locationManger.requestWhenInUseAuthorization()
         }
@@ -68,9 +67,9 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
                 break
             }
         }
+        
         if session.canAddInput(videoDeviceInput) {
             session.addInput(videoDeviceInput)
-            self.createDeviceRotationCoordinator()
         } else {
             print("비디오 장치를 추가 할 수 없습니다.")
             session.commitConfiguration()
@@ -96,13 +95,6 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
             photoOutput.isLivePhotoCaptureEnabled = photoOutput.isLivePhotoCaptureSupported
             photoOutput.maxPhotoQualityPrioritization = .quality
             self.configurePhotoOutput()
-            
-            let readinessCoordinator = AVCapturePhotoOutputReadinessCoordinator(photoOutput: photoOutput)
-            DispatchQueue.main.async {
-                self.photoOuputReadinessCoordinator = readinessCoordinator
-                readinessCoordinator.delegate = self
-            }
-            
         }
         session.commitConfiguration()
         session.startRunning()
@@ -127,14 +119,12 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
     
     func setUpPhotoSettings()  -> AVCapturePhotoSettings{
         var photoSettings = AVCapturePhotoSettings()
-        
         //HEIF
         if self.photoOutput.availablePhotoCodecTypes.contains(AVVideoCodecType.hevc) {
             photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
         } else {
             photoSettings = AVCapturePhotoSettings()
         }
-        
         //flash auto mode
         if self.flashMode == .on && self.videoDeviceInput.device.isFlashAvailable{
             photoSettings.flashMode = .auto
@@ -180,46 +170,21 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
             break
         }
     }
-    
 
-    
     func capturePhoto() {
         if self.photoSettings == nil {
             print("No photo settings to capture")
             return
         }
-        self.photoOuputReadinessCoordinator.startTrackingCaptureRequest(using: photoSettings)
-        
-        let videoRotationAngle = self.videoDeviceRotationCoordinator.videoRotationAngleForHorizonLevelCapture
-        
         let photoSettings = AVCapturePhotoSettings(from: self.photoSettings)
         if photoSettings.livePhotoMovieFileURL != nil {
             photoSettings.livePhotoMovieFileURL = livePhotoMovieUniqueTemporaryDirectoryFileURL()
         }
-        
+
         sessionQueue.async {
             if let photoOuputConnection = self.photoOutput.connection(with: .video) {
-                photoOuputConnection.videoRotationAngle = videoRotationAngle
+                photoOuputConnection.videoRotationAngle = UIDevice.current.orientation.videoRotationAngel
             }
-            
-            
-            //photoCaptureProcessor를 delegate를 사용해서 할 때 이용하기
-            /*
-            photoSettings.flashMode = self.flashMode
-            photoSettings.photoQualityPrioritization = .quality
-
-            let photoCaptureProcessor = PhotoCaptureProcessorDelegate(with: photoSettings,
-                                                                      willCapturePhotoAnimation: {},
-                                                                      livePhotoCaptureHandler: { capturing in },
-                                                                      completionHandler: { photoProcessor in
-                self.sessionQueue.async {
-                    self.inProgressPhotoCaptrueDelegates[photoProcessor.requestPhotoSettings.uniqueID] = nil
-                }
-            })
-            photoCaptureProcessor.location = self.locationManger.location
-
-            self.inProgressPhotoCaptrueDelegates[photoSettings.uniqueID] = photoCaptureProcessor
-            */
             self.photoOutput.capturePhoto(with: photoSettings, delegate: self)
         }
     } 
@@ -228,7 +193,6 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
         let waterMark = self.waterMark
         guard let image = UIImage(data: imageData) else { return }
         guard let newImage = image.overlayWith(image: waterMark ?? UIImage()) else { return }
-        
         UIImageWriteToSavedPhotosAlbum(newImage, nil, nil, nil)
         print("Saved Photo")
     }
@@ -329,11 +293,6 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
                     self.session.addInput(videoDeviceInput)
                     self.videoDeviceInput = videoDeviceInput
                     
-                    //화면 회전 확인
-                    DispatchQueue.main.async {
-                        self.createDeviceRotationCoordinator()
-                    }
-                    
                 } else {
                     self.session.addInput(self.videoDeviceInput)
                 }
@@ -399,6 +358,19 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
             }
         }
     }
+    
+    func mergeImage(topImage: UIImage, bottomImage: UIImage) -> UIImage? {
+        let size = CGSize(width: bottomImage.size.width, height: bottomImage.size.height)
+        UIGraphicsBeginImageContext(size)
+        
+        let area = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        bottomImage.draw(in: area)
+        topImage.draw(in: area, blendMode: .normal, alpha: 1)
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
 }
 
 extension Camera: AVCapturePhotoCaptureDelegate {
@@ -420,8 +392,12 @@ extension Camera: AVCapturePhotoCaptureDelegate {
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
         self.photoData = photo.fileDataRepresentation()
-        //guard let image = photo.fileDataRepresentation() else { return }
-        //self.savePhoto(imageData)
+        //받은 사진데이터 합성하기 -> livePhoto 사용시 예외 처리
+        /*
+        guard let image = UIImage(data: photoData ?? Data()) else { return }
+        guard let mergeImage = mergeImage(topImage: waterMark ?? UIImage(), bottomImage: image) else { return }
+        self.photoData = mergeImage.jpegData(compressionQuality: 1.0)
+         */
     }
     
     @available(iOS 17.0, *)

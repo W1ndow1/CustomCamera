@@ -3,7 +3,7 @@
 import SwiftUI
 
 struct WaterMarkView: View {
-    @StateObject var model = CameraViewModel()
+    @ObservedObject var model: CameraViewModel
     var body: some View {
         ZStack {
             Capsule()
@@ -20,5 +20,5 @@ struct WaterMarkView: View {
 }
 
 #Preview {
-    WaterMarkView()
+    WaterMarkView(model: .init())
 }

@@ -78,7 +78,7 @@ struct ContentView: View {
                 Spacer()
                 
                 if simpleModel.isWaterMarkOn {
-                    WaterMarkView()
+                    WaterMarkView(model: simpleModel)
                         .viewRotationEffect(deg: degToFaceUp)
                 }
                 
@@ -181,7 +181,7 @@ extension ContentView {
     var captureButton: some View {
         Button(action: {
             simpleModel.capturePhoto()
-            simpleModel.waterMarkImage = simpleModel.isWaterMarkOn ? viewToImage(view: WaterMarkView()) : nil
+            simpleModel.waterMarkImage = simpleModel.isWaterMarkOn ? viewToImage(view: WaterMarkView(model: simpleModel)) : nil
         }, label: {
             Circle()
                 .foregroundStyle(.white)

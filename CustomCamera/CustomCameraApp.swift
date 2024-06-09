@@ -38,7 +38,7 @@ struct CustomCameraApp: App {
                             offset = 0
                         }
                         degToFaceUp = Double(offset) * 90.0
-                        print("\(degToFaceUp)")
+                        //print("\(degToFaceUp)")
                     }
         }
     }
