@@ -12,6 +12,7 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
     var photoOutput = AVCapturePhotoOutput()
     var photoData: Data?
     var waterMark: UIImage?
+    var isWaterMarkOn = false
     var flashMode: AVCaptureDevice.FlashMode = .off
     var livePhotoMode: LivePhotoMode = .off
     var photoSettings: AVCapturePhotoSettings!
@@ -19,11 +20,11 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
     var photoQualityPrioritizationMode: AVCapturePhotoOutput.QualityPrioritization = .balanced
     let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInUltraWideCamera, .builtInWideAngleCamera, .builtInTelephotoCamera], mediaType: .video, position: .back)
     let sessionQueue = DispatchQueue(label: "session queue")
-    var inProgressPhotoCaptrueDelegates = [Int64: PhotoCaptureProcessorDelegate]()
     var livePhotoCompanionMovieURL: URL?
     let locationManger = CLLocationManager()
-    var previewView = CameraPreview.VideoPreviewView()
     
+    var inProgressPhotoCaptrueDelegates = [Int64: PhotoCaptureProcessorDelegate]()
+    var previewView = CameraPreview.VideoPreviewView()
     var photoOuputReadinessCoordinator: AVCapturePhotoOutputReadinessCoordinator!
     private var videoDeviceRotationCoordinator: AVCaptureDevice.RotationCoordinator!
     private var videoRotationAngleForHorizonLevelPreviewObservation: NSKeyValueObservation?
@@ -32,8 +33,20 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
     @Published var isCameraBusy = false
 
     func waterMarkReceive(image: UIImage) {
-        self.waterMark = image
+        let newImage = resizeWaterMark(image: image, by: 10)
+        self.waterMark = newImage
     }
+    
+    func resizeWaterMark(image: UIImage, by scale: CGFloat) -> UIImage? {
+        let originalSize = image.size
+        let newSize = CGSize(width: originalSize.width * scale, height: originalSize.height * scale)
+        let renderer = UIGraphicsImageRenderer(size: newSize)
+        let resizedImage = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+        return resizedImage
+    }
+    
     
     func toggleLivePhotoMode() {
         sessionQueue.async {
@@ -88,7 +101,6 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
         } catch {
             print(error.localizedDescription)
         }
-        
         //Add the photoOutput
         if session.canAddOutput(photoOutput) {
             session.addOutput(photoOutput)
@@ -187,14 +199,6 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
             }
             self.photoOutput.capturePhoto(with: photoSettings, delegate: self)
         }
-    } 
-    
-    func savePhoto(_ imageData: Data) {
-        let waterMark = self.waterMark
-        guard let image = UIImage(data: imageData) else { return }
-        guard let newImage = image.overlayWith(image: waterMark ?? UIImage()) else { return }
-        UIImageWriteToSavedPhotosAlbum(newImage, nil, nil, nil)
-        print("Saved Photo")
     }
     
     func zoom(_ zoom: CGFloat) {
@@ -363,13 +367,30 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
         let size = CGSize(width: bottomImage.size.width, height: bottomImage.size.height)
         UIGraphicsBeginImageContext(size)
         
-        let area = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-        bottomImage.draw(in: area)
-        topImage.draw(in: area, blendMode: .normal, alpha: 1)
+        bottomImage.draw(in: CGRect(origin: .zero, size: bottomImage.size))
+        let topOrigin = CGPoint(x: (bottomImage.size.width - topImage.size.width) / 2, y: (bottomImage.size.height - topImage.size.height) / 2)
+        topImage.draw(in: CGRect(origin: topOrigin , size: CGSize(width: topImage.size.width, height: topImage.size.height)), blendMode: .normal, alpha: 1.0)
         
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage
+    }
+    
+    //오류 발생 -> mergeImage 사용하기
+    func combineImages(backgroundImage: UIImage, overlayImage: UIImage) -> UIImage? {
+        // 배경 이미지 크기를 기준으로 렌더러 크기 설정
+        let renderer = UIGraphicsImageRenderer(size: backgroundImage.size)
+        let combinedImage = renderer.image { context in
+            // 배경 이미지 그리기
+            backgroundImage.draw(in: CGRect(origin: .zero, size: backgroundImage.size))
+            // 오버레이 이미지의 위치 설정
+            let overlaySize = overlayImage.size
+            let overlayOrigin = CGPoint(x: (backgroundImage.size.width - overlaySize.width) / 2,
+                                        y: (backgroundImage.size.height - overlaySize.height) / 2)
+            overlayImage.draw(in: CGRect(origin: overlayOrigin, size: overlaySize), blendMode: .normal, alpha: 1.0)
+        }
+        
+        return combinedImage
     }
 }
 
@@ -392,12 +413,12 @@ extension Camera: AVCapturePhotoCaptureDelegate {
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
         self.photoData = photo.fileDataRepresentation()
-        //받은 사진데이터 합성하기 -> livePhoto 사용시 예외 처리
-        /*
-        guard let image = UIImage(data: photoData ?? Data()) else { return }
-        guard let mergeImage = mergeImage(topImage: waterMark ?? UIImage(), bottomImage: image) else { return }
-        self.photoData = mergeImage.jpegData(compressionQuality: 1.0)
-         */
+        if livePhotoMode == .off && isWaterMarkOn {
+            guard let image = UIImage(data: photoData ?? Data()) else { return }
+            //guard let mergeImage = combineImages(backgroundImage: image, overlayImage: waterMark ?? UIImage()) else { return }
+            guard let mergeImage = mergeImage(topImage: waterMark ?? UIImage(), bottomImage: image) else { return }
+            self.photoData = mergeImage.jpegData(compressionQuality: 1.0)
+        }
     }
     
     @available(iOS 17.0, *)

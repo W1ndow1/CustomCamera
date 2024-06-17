@@ -12,12 +12,14 @@
 		A80EE4532BB6AB3200546B95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A80EE4522BB6AB3200546B95 /* Assets.xcassets */; };
 		A80EE4572BB6AB3200546B95 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A80EE4562BB6AB3200546B95 /* Preview Assets.xcassets */; };
 		A83420712BECCF4200702514 /* PhotoCaptureDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83420702BECCF4200702514 /* PhotoCaptureDelegate.swift */; };
+		A8374B592C1BDDBF00CD1DD3 /* PhotoLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8374B582C1BDDBF00CD1DD3 /* PhotoLibraryView.swift */; };
 		A83AE9CA2BBFD6BD001BDBDB /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */; };
 		A83AE9D22BCB73BB001BDBDB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A83AE9D12BCB73BB001BDBDB /* README.md */; };
 		A83AE9D42BCD0B25001BDBDB /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9D32BCD0B25001BDBDB /* CameraViewModel.swift */; };
 		A87D924F2BDB502A00ECF0DD /* LensChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D924E2BDB502A00ECF0DD /* LensChangeView.swift */; };
 		A87D92512BE1364300ECF0DD /* WaterMarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D92502BE1364300ECF0DD /* WaterMarkView.swift */; };
 		A885D9732BFB45DB0072D73B /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A885D9722BFB45DB0072D73B /* Extension.swift */; };
+		A888FFE92C1D7FC400B3502A /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A888FFE82C1D7FC400B3502A /* PhotoLibrary.swift */; };
 		A8FB50342BE48D8500D3A404 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FB50332BE48D8500D3A404 /* AppDelegate.swift */; };
 		A8FB50362BE62EAD00D3A404 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FB50352BE62EAD00D3A404 /* Camera.swift */; };
 /* End PBXBuildFile section */
@@ -30,12 +32,14 @@
 		A80EE4542BB6AB3200546B95 /* CustomCamera.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CustomCamera.entitlements; sourceTree = "<group>"; };
 		A80EE4562BB6AB3200546B95 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A83420702BECCF4200702514 /* PhotoCaptureDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCaptureDelegate.swift; sourceTree = "<group>"; };
+		A8374B582C1BDDBF00CD1DD3 /* PhotoLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryView.swift; sourceTree = "<group>"; };
 		A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		A83AE9D12BCB73BB001BDBDB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A83AE9D32BCD0B25001BDBDB /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		A87D924E2BDB502A00ECF0DD /* LensChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensChangeView.swift; sourceTree = "<group>"; };
 		A87D92502BE1364300ECF0DD /* WaterMarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterMarkView.swift; sourceTree = "<group>"; };
 		A885D9722BFB45DB0072D73B /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		A888FFE82C1D7FC400B3502A /* PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrary.swift; sourceTree = "<group>"; };
 		A8FB50332BE48D8500D3A404 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8FB50352BE62EAD00D3A404 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -101,11 +105,20 @@
 		A80EE45E2BB6B79000546B95 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A8374B5A2C1C8DE200CD1DD3 /* Core */,
 				A87D924D2BDB4F9700ECF0DD /* SubView */,
-				A80EE4502BB6AB3000546B95 /* ContentView.swift */,
-				A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		A8374B5A2C1C8DE200CD1DD3 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */,
+				A80EE4502BB6AB3000546B95 /* ContentView.swift */,
+				A8374B582C1BDDBF00CD1DD3 /* PhotoLibraryView.swift */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 		A83AE9C62BB841B2001BDBDB /* Service */ = {
@@ -115,6 +128,7 @@
 				A83420702BECCF4200702514 /* PhotoCaptureDelegate.swift */,
 				A8FB50352BE62EAD00D3A404 /* Camera.swift */,
 				A885D9722BFB45DB0072D73B /* Extension.swift */,
+				A888FFE82C1D7FC400B3502A /* PhotoLibrary.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -199,9 +213,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8374B592C1BDDBF00CD1DD3 /* PhotoLibraryView.swift in Sources */,
 				A8FB50342BE48D8500D3A404 /* AppDelegate.swift in Sources */,
 				A83420712BECCF4200702514 /* PhotoCaptureDelegate.swift in Sources */,
 				A87D92512BE1364300ECF0DD /* WaterMarkView.swift in Sources */,
+				A888FFE92C1D7FC400B3502A /* PhotoLibrary.swift in Sources */,
 				A83AE9CA2BBFD6BD001BDBDB /* CameraPreview.swift in Sources */,
 				A80EE4512BB6AB3000546B95 /* ContentView.swift in Sources */,
 				A87D924F2BDB502A00ECF0DD /* LensChangeView.swift in Sources */,

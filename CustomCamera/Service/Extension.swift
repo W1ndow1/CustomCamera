@@ -6,26 +6,9 @@
 //
 
 import Foundation
-import UIKit
 import SwiftUI
 
-
-extension UIImage {
-    func overlayWith(image: UIImage) -> UIImage? {
-        let newSize = CGSize(width: size.width, height: size.height)
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
-        
-        draw(in: CGRect(origin: .zero, size: size))
-        image.draw(in: CGRect(origin: CGPoint(x: size.width - 700, y: size.height - 1200), size: .init(width: 300, height: 150)))
-        
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage
-    }
-}
-
 extension View {
-    
     func viewToImage(view: some View) -> UIImage {
         var image = UIImage()
         let controller = UIHostingController(rootView: view)
@@ -64,7 +47,6 @@ extension UIDeviceOrientation {
         }
     }
 }
-
 enum LivePhotoMode {
     case on
     case off

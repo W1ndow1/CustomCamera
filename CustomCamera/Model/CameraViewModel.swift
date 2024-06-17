@@ -17,13 +17,14 @@ class CameraViewModel: ObservableObject {
     var currentZoomValue: CGFloat = 1.0
     var lastZoomValue: CGFloat = 1.0
     
+    @Published var seletedImage: UIImage? = nil
+    @Published var imageSelection: PhotosPickerItem? = nil
     @Published var waterMarkImage: UIImage?
     @Published var recentImage: UIImage?
     @Published var isFlashedOn = false
     @Published var isSilentModeOn = false
     @Published var isLivePhotoOn = false
     @Published var shutterEffect = false
-    @Published var imageSelection: PhotosPickerItem? = nil
     @Published var isWaterMarkOn = false
     @Published var waterMarkText = ""
     
@@ -47,6 +48,7 @@ class CameraViewModel: ObservableObject {
     
     func switchWaterMark() {
         isWaterMarkOn.toggle()
+        camera.isWaterMarkOn = self.isWaterMarkOn
     }
     
     
