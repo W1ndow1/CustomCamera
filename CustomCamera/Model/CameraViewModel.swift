@@ -18,7 +18,6 @@ class CameraViewModel: ObservableObject {
     var lastZoomValue: CGFloat = 1.0
     
     @Published var seletedImage: UIImage? = nil
-    @Published var imageSelection: PhotosPickerItem? = nil
     @Published var waterMarkImage: UIImage?
     @Published var recentImage: UIImage?
     @Published var isFlashedOn = false
@@ -54,7 +53,7 @@ class CameraViewModel: ObservableObject {
     
     func switchFlash() {
         isFlashedOn.toggle()
-        camera.flashMode = isFlashedOn ? .on : .off
+        camera.flashMode = isFlashedOn == true ? .on : .off
     }
     
     func switchSilent() {

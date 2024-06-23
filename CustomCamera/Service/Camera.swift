@@ -5,7 +5,7 @@ import Photos
 import CoreLocation
 
 
-class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinatorDelegate {
+class Camera: NSObject, ObservableObject {
     
     var session = AVCaptureSession()
     var videoDeviceInput: AVCaptureDeviceInput!
@@ -22,12 +22,6 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
     let sessionQueue = DispatchQueue(label: "session queue")
     var livePhotoCompanionMovieURL: URL?
     let locationManger = CLLocationManager()
-    
-    var inProgressPhotoCaptrueDelegates = [Int64: PhotoCaptureProcessorDelegate]()
-    var previewView = CameraPreview.VideoPreviewView()
-    var photoOuputReadinessCoordinator: AVCapturePhotoOutputReadinessCoordinator!
-    private var videoDeviceRotationCoordinator: AVCaptureDevice.RotationCoordinator!
-    private var videoRotationAngleForHorizonLevelPreviewObservation: NSKeyValueObservation?
     
     @Published var recentImage: UIImage?
     @Published var isCameraBusy = false
@@ -141,7 +135,7 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
         if self.flashMode == .on && self.videoDeviceInput.device.isFlashAvailable{
             photoSettings.flashMode = .auto
         }
-        
+
         // Enable high-resolution photos
         photoSettings.maxPhotoDimensions = self.photoOutput.maxPhotoDimensions
         if !photoSettings.availablePreviewPhotoPixelFormatTypes.isEmpty {
@@ -189,6 +183,7 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
             return
         }
         let photoSettings = AVCapturePhotoSettings(from: self.photoSettings)
+        photoSettings.flashMode = flashMode
         if photoSettings.livePhotoMovieFileURL != nil {
             photoSettings.livePhotoMovieFileURL = livePhotoMovieUniqueTemporaryDirectoryFileURL()
         }
@@ -329,16 +324,6 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
         }
     }
     
-    
-    func createDeviceRotationCoordinator() {
-        videoDeviceRotationCoordinator = AVCaptureDevice.RotationCoordinator(device: videoDeviceInput.device, previewLayer: previewView.videoPreviewLayer)
-        previewView.videoPreviewLayer.connection?.videoRotationAngle = videoDeviceRotationCoordinator.videoRotationAngleForHorizonLevelPreview
-        videoRotationAngleForHorizonLevelPreviewObservation = videoDeviceRotationCoordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: .new) { _, change in
-            guard let videoRotationAngleForHorizonLevelPreview = change.newValue else { return }
-            self.previewView.videoPreviewLayer.connection?.videoRotationAngle = videoRotationAngleForHorizonLevelPreview
-        }
-    }
-    
     func focus(with focusMode: AVCaptureDevice.FocusMode, exposureMode: AVCaptureDevice.ExposureMode, at devicePoint: CGPoint, monitorSubjectAreaChange: Bool) {
         sessionQueue.async {
             let device = self.videoDeviceInput.device
@@ -376,22 +361,6 @@ class Camera: NSObject, ObservableObject, AVCapturePhotoOutputReadinessCoordinat
         return newImage
     }
     
-    //오류 발생 -> mergeImage 사용하기
-    func combineImages(backgroundImage: UIImage, overlayImage: UIImage) -> UIImage? {
-        // 배경 이미지 크기를 기준으로 렌더러 크기 설정
-        let renderer = UIGraphicsImageRenderer(size: backgroundImage.size)
-        let combinedImage = renderer.image { context in
-            // 배경 이미지 그리기
-            backgroundImage.draw(in: CGRect(origin: .zero, size: backgroundImage.size))
-            // 오버레이 이미지의 위치 설정
-            let overlaySize = overlayImage.size
-            let overlayOrigin = CGPoint(x: (backgroundImage.size.width - overlaySize.width) / 2,
-                                        y: (backgroundImage.size.height - overlaySize.height) / 2)
-            overlayImage.draw(in: CGRect(origin: overlayOrigin, size: overlaySize), blendMode: .normal, alpha: 1.0)
-        }
-        
-        return combinedImage
-    }
 }
 
 extension Camera: AVCapturePhotoCaptureDelegate {
@@ -415,7 +384,6 @@ extension Camera: AVCapturePhotoCaptureDelegate {
         self.photoData = photo.fileDataRepresentation()
         if livePhotoMode == .off && isWaterMarkOn {
             guard let image = UIImage(data: photoData ?? Data()) else { return }
-            //guard let mergeImage = combineImages(backgroundImage: image, overlayImage: waterMark ?? UIImage()) else { return }
             guard let mergeImage = mergeImage(topImage: waterMark ?? UIImage(), bottomImage: image) else { return }
             self.photoData = mergeImage.jpegData(compressionQuality: 1.0)
         }

@@ -9,6 +9,7 @@ struct LensChangeView: View {
             Capsule()
                 .frame(width: 210, height: 60)
                 .foregroundStyle(.gray.opacity(0.2))
+            
         }
     }
 }

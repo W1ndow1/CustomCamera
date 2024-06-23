@@ -14,3 +14,9 @@ AVCam: Building a Camera App - Sample Code
 4. SwiftUI 화면 Image로 변환
 - https://www.hackingwithswift.com/quick-start/swiftui/how-to-convert-a-swiftui-view-to-an-image
 - https://developer.apple.com/documentation/swiftui/imagerenderer
+
+5. 사진보관함 불러오기
+Browsing and Modifying Photo Albums
+- https://developer.apple.com/documentation/photokit/browsing_and_modifying_photo_albums
+Browsing Your Photos
+- https://developer.apple.com/tutorials/sample-apps/capturingphotos-browsephotos

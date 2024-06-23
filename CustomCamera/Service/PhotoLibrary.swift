@@ -9,63 +9,140 @@ import Foundation
 import Photos
 import UIKit
 
-class PhotoLibrary: ObservableObject {
+enum AlbumSectionType: Int {
+    case all, smartAlbums, userCollections
     
-    private var allphotos: PHFetchResult<PHAsset>!
+    var description: String {
+        switch self {
+        case .all: return "All Photos"
+        case .smartAlbums: return "Smart Albums"
+        case .userCollections: return "User Collections"
+        }
+    }
+}
+
+class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
     
-    @Published var images: [UIImage] = []
-    @Published var isAuthorizedPhotoLibaray: Bool = false
+    @Published var scale: CGFloat? = nil
+    @Published var photos: [PHAsset] = []
+    @Published var isAuthorized = false
+    fileprivate let imageManager = PHCachingImageManager()
     
-    init() {
-        checkPhotoLibarayAuthorization()
+    @Published var allPhotos = PHFetchResult<PHAsset>()
+    @Published var smartAlbums = PHFetchResult<PHAssetCollection>()
+    @Published var userCollections = PHFetchResult<PHAssetCollection>()
+    @Published var section: [AlbumSectionType] = [.all, .smartAlbums, .userCollections]
+    
+
+    override init() {
+        super.init()
+        PHPhotoLibrary.shared().register(self)
     }
     
+    deinit {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
+    }
+    
+    func checkPermissionAndFetchAssets() async {
+        let granted = await requestPermission()
+        if granted {
+            DispatchQueue.main.async {
+                self.fetchAsset()
+            }
+        }
+    }
+    
+    private  func requestPermission() async -> Bool {
+        let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        switch status {
+        case .authorized, .limited :
+            return true
+        case .notDetermined:
+            let newStatus = await PHPhotoLibrary.requestAuthorization(for: .readWrite)
+            return newStatus == .authorized || newStatus == .limited
+        default:
+            return false
+        }
+    }
+    
+    //각각 항목에 PHfetchResult 오브젝트 만들기
+    func fetchAsset() {
+        let  allPhotosOptions = PHFetchOptions()
+        allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        allPhotos = PHAsset.fetchAssets(with: allPhotosOptions)
+        smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+        userCollections = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil)
+        PHPhotoLibrary.shared().register(self)
+    }
+    
+    
+    //MARK: - 이전코드
     func checkPhotoLibarayAuthorization() {
         let status = PHPhotoLibrary.authorizationStatus()
         switch status {
         case .authorized:
-            isAuthorizedPhotoLibaray = true
-            fetchAllPhoto()
+            isAuthorized = true
+            loadPhotos()
         case .notDetermined:
-            PHPhotoLibrary.requestAuthorization { newStatus in
+            PHPhotoLibrary.requestAuthorization { [weak self] status in
                 DispatchQueue.main.async {
-                    if newStatus == .authorized {
-                        self.isAuthorizedPhotoLibaray = true
-                        self.fetchAllPhoto()
+                    if status == .authorized {
+                        self?.isAuthorized = true
+                        self?.loadPhotos()
                     }
                 }
             }
-            
         default:
-            isAuthorizedPhotoLibaray = false
+            break
         }
     }
-    
-    func fetchAllPhoto() {
-        //사진 가져오는 옵션
+
+    func loadPhotos() {
         let fetchOptions = PHFetchOptions()
-        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        allphotos = PHAsset.fetchAssets(with: fetchOptions)
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         
-        //실제 파일 가져오기
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-        fetchResult.enumerateObjects { asset, _, _ in
-            self.requestImage(for: asset)
-        }
+        self.photos = fetchResult.objects(at: IndexSet(integersIn: 0..<fetchResult.count))
+        
+        let assets = fetchResult.objects(at: IndexSet(integersIn: 0..<fetchResult.count))
+        let targetSize = CGSize(width: 100, height: 100)
+        imageManager.startCachingImages(for: assets, targetSize: targetSize, contentMode: .aspectFill, options: nil)
     }
     
-    func requestImage(for asset: PHAsset) {
-        let manager = PHImageManager.default()
+    func requestImage(for asset: PHAsset, targetSize: CGSize, completion: @escaping(UIImage?) -> Void) {
         let options = PHImageRequestOptions()
         options.isSynchronous = false
         options.deliveryMode = .highQualityFormat
-        manager.requestImage(for: asset, targetSize: CGSize(width: 300, height: 300), contentMode: .aspectFill, options: options) {
-            image, _ in
-            if let image = image {
-                DispatchQueue.main.async {
-                    self.images.append(image)
-                }
+        imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: { image, _ in
+            completion(image)
+        })
+    }
+    
+    func loadAssetImage(for asset: PHAsset, targetSize: CGSize, completion: @escaping(UIImage?) -> Void) {
+        let options = PHImageRequestOptions()
+        options.version = .original
+        options.deliveryMode = .highQualityFormat
+        options.isSynchronous = false
+        options.isNetworkAccessAllowed = true
+        PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: { image, _ in
+            completion(image)
+        })
+    }
+}
+
+extension PhotoLibrary {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        DispatchQueue.main.sync {
+            if let changeDetail = changeInstance.changeDetails(for: allPhotos) {
+                allPhotos = changeDetail.fetchResultAfterChanges
+            }
+            if let changeDetail = changeInstance.changeDetails(for: smartAlbums) {
+                smartAlbums = changeDetail.fetchResultAfterChanges
+            }
+            if let changeDetail = changeInstance.changeDetails(for: userCollections) {
+                userCollections = changeDetail.fetchResultAfterChanges
             }
         }
     }
+    
 }

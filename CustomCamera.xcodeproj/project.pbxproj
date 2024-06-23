@@ -20,6 +20,13 @@
 		A87D92512BE1364300ECF0DD /* WaterMarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D92502BE1364300ECF0DD /* WaterMarkView.swift */; };
 		A885D9732BFB45DB0072D73B /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A885D9722BFB45DB0072D73B /* Extension.swift */; };
 		A888FFE92C1D7FC400B3502A /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A888FFE82C1D7FC400B3502A /* PhotoLibrary.swift */; };
+		A88B3F652C24A5E800372031 /* AlbumListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88B3F642C24A5E800372031 /* AlbumListView.swift */; };
+		A88B3F672C25CE2F00372031 /* PhotoGridViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88B3F662C25CE2F00372031 /* PhotoGridViewModel.swift */; };
+		A88B3F6B2C25E49200372031 /* AlbumTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88B3F6A2C25E49200372031 /* AlbumTitleView.swift */; };
+		A88B3F6F2C26BB3700372031 /* PhotoGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88B3F6E2C26BB3700372031 /* PhotoGridView.swift */; };
+		A88B3F712C27296300372031 /* PhotoGridCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88B3F702C27296300372031 /* PhotoGridCellView.swift */; };
+		A88B3F732C273E6600372031 /* PhotoGridCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88B3F722C273E6600372031 /* PhotoGridCellViewModel.swift */; };
+		A88B89A92C21579A0088BBCE /* PhotoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88B89A82C21579A0088BBCE /* PhotoDetailView.swift */; };
 		A8FB50342BE48D8500D3A404 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FB50332BE48D8500D3A404 /* AppDelegate.swift */; };
 		A8FB50362BE62EAD00D3A404 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FB50352BE62EAD00D3A404 /* Camera.swift */; };
 /* End PBXBuildFile section */
@@ -40,6 +47,13 @@
 		A87D92502BE1364300ECF0DD /* WaterMarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterMarkView.swift; sourceTree = "<group>"; };
 		A885D9722BFB45DB0072D73B /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		A888FFE82C1D7FC400B3502A /* PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrary.swift; sourceTree = "<group>"; };
+		A88B3F642C24A5E800372031 /* AlbumListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListView.swift; sourceTree = "<group>"; };
+		A88B3F662C25CE2F00372031 /* PhotoGridViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridViewModel.swift; sourceTree = "<group>"; };
+		A88B3F6A2C25E49200372031 /* AlbumTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumTitleView.swift; sourceTree = "<group>"; };
+		A88B3F6E2C26BB3700372031 /* PhotoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridView.swift; sourceTree = "<group>"; };
+		A88B3F702C27296300372031 /* PhotoGridCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridCellView.swift; sourceTree = "<group>"; };
+		A88B3F722C273E6600372031 /* PhotoGridCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridCellViewModel.swift; sourceTree = "<group>"; };
+		A88B89A82C21579A0088BBCE /* PhotoDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailView.swift; sourceTree = "<group>"; };
 		A8FB50332BE48D8500D3A404 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8FB50352BE62EAD00D3A404 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,6 +112,8 @@
 			isa = PBXGroup;
 			children = (
 				A83AE9D32BCD0B25001BDBDB /* CameraViewModel.swift */,
+				A88B3F662C25CE2F00372031 /* PhotoGridViewModel.swift */,
+				A88B3F722C273E6600372031 /* PhotoGridCellViewModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -116,6 +132,8 @@
 			children = (
 				A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */,
 				A80EE4502BB6AB3000546B95 /* ContentView.swift */,
+				A88B3F642C24A5E800372031 /* AlbumListView.swift */,
+				A88B3F6E2C26BB3700372031 /* PhotoGridView.swift */,
 				A8374B582C1BDDBF00CD1DD3 /* PhotoLibraryView.swift */,
 			);
 			path = Core;
@@ -136,8 +154,11 @@
 		A87D924D2BDB4F9700ECF0DD /* SubView */ = {
 			isa = PBXGroup;
 			children = (
+				A88B3F6A2C25E49200372031 /* AlbumTitleView.swift */,
 				A87D924E2BDB502A00ECF0DD /* LensChangeView.swift */,
 				A87D92502BE1364300ECF0DD /* WaterMarkView.swift */,
+				A88B3F702C27296300372031 /* PhotoGridCellView.swift */,
+				A88B89A82C21579A0088BBCE /* PhotoDetailView.swift */,
 			);
 			path = SubView;
 			sourceTree = "<group>";
@@ -215,16 +236,23 @@
 			files = (
 				A8374B592C1BDDBF00CD1DD3 /* PhotoLibraryView.swift in Sources */,
 				A8FB50342BE48D8500D3A404 /* AppDelegate.swift in Sources */,
+				A88B3F732C273E6600372031 /* PhotoGridCellViewModel.swift in Sources */,
 				A83420712BECCF4200702514 /* PhotoCaptureDelegate.swift in Sources */,
+				A88B3F672C25CE2F00372031 /* PhotoGridViewModel.swift in Sources */,
 				A87D92512BE1364300ECF0DD /* WaterMarkView.swift in Sources */,
+				A88B3F6B2C25E49200372031 /* AlbumTitleView.swift in Sources */,
+				A88B3F652C24A5E800372031 /* AlbumListView.swift in Sources */,
 				A888FFE92C1D7FC400B3502A /* PhotoLibrary.swift in Sources */,
+				A88B89A92C21579A0088BBCE /* PhotoDetailView.swift in Sources */,
 				A83AE9CA2BBFD6BD001BDBDB /* CameraPreview.swift in Sources */,
 				A80EE4512BB6AB3000546B95 /* ContentView.swift in Sources */,
 				A87D924F2BDB502A00ECF0DD /* LensChangeView.swift in Sources */,
 				A885D9732BFB45DB0072D73B /* Extension.swift in Sources */,
 				A83AE9D42BCD0B25001BDBDB /* CameraViewModel.swift in Sources */,
+				A88B3F6F2C26BB3700372031 /* PhotoGridView.swift in Sources */,
 				A80EE44F2BB6AB3000546B95 /* CustomCameraApp.swift in Sources */,
 				A8FB50362BE62EAD00D3A404 /* Camera.swift in Sources */,
+				A88B3F712C27296300372031 /* PhotoGridCellView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

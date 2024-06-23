@@ -12,6 +12,7 @@ struct ContentView: View {
     @State var viewImage: UIImage?
     @State var isImageSeleted = false
     @Environment(\.displayScale) var displayScale
+    
     var degToFaceUp: Double
     
     var body: some View {
@@ -192,10 +193,7 @@ extension ContentView {
     var captureButton: some View {
         Button(action: {
             simpleModel.capturePhoto()
-            
-            //이미지가 반으로 짤리는 현상
-            //simpleModel.waterMarkImage = simpleModel.isWaterMarkOn ? WaterMarkView(model: simpleModel).snapshot() : nil
-            
+    
             let image = ImageRenderer(content: WaterMarkView(model: simpleModel))
             image.scale = displayScale
             
@@ -218,6 +216,7 @@ extension ContentView {
         Button{
             print("포토라이브러리로 이동")
             isImageSeleted = true
+            
         } label: {
             if let previewImage = simpleModel.recentImage {
                 Image(uiImage: previewImage)
@@ -235,7 +234,8 @@ extension ContentView {
         }
         .viewRotationEffect(deg: degToFaceUp)
         .fullScreenCover(isPresented: $isImageSeleted) {
-            PhotoLibraryView()
+            AlbumListView()
+            //PhotoLibraryView()
         }
     }
 

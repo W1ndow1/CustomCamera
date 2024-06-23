@@ -21,6 +21,7 @@ struct WaterMarkView: View {
                     .foregroundStyle(Color.white)
                     .font(.system(size: 25, weight: .bold, design: .serif))
             }
+            
         }
     }
     
