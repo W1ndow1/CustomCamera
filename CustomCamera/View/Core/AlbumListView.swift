@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct AlbumListView: View {
+    @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel = PhotoLibrary()
     var body: some View {
         NavigationStack {
@@ -25,6 +26,17 @@ struct AlbumListView: View {
             }
             .navigationTitle("사진보관함")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button{
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .imageScale(.large)
+                            .foregroundStyle(.foreground)
+                    }
+                }
+            }
             .onAppear(){
                 Task {
                     await viewModel.checkPermissionAndFetchAssets()
