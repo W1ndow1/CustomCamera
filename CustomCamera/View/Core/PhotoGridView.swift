@@ -11,14 +11,16 @@ import PhotosUI
 struct PhotoGridView: View {
     @ObservedObject var model: PhotoGridViewModel
     
-    private let gridColumn = Array(repeating: GridItem(.flexible(), spacing: 2), count: 2)
+    private let gridColumn = Array(repeating: GridItem(.flexible(), spacing: 2), count: 4)
     
     var body: some View {
         ScrollViewReader{ proxy in
             ScrollView {
                 LazyVGrid(columns: gridColumn, spacing: 2){
                     ForEach(model.assets.objects(at: IndexSet(integersIn: 0..<model.assets.count)), id: \.self) { asset in
-                        PhotoGridCellView(asset: asset)
+                        NavigationLink(destination: PhotoDetailView(asset: asset)) {
+                            PhotoGridCellView(asset: asset)
+                        }
                     }
                 }
             }

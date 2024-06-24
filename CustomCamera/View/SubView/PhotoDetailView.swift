@@ -9,7 +9,7 @@ import SwiftUI
 import Photos
 
 struct PhotoDetailView: View {
-    @ObservedObject var viewModel: PhotoLibrary
+    var viewModel = PhotoLibrary()
     var asset: PHAsset
     @State private var image: UIImage? = nil
     @State private var isControllerHidden = false

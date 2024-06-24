@@ -45,7 +45,7 @@ struct PhotoLibraryView: View {
                             Button{
                                 dismiss()
                             } label: {
-                                Image(systemName: "xmark")
+                                Image(systemName: "camera")
                                     .imageScale(.large)
                                     .foregroundStyle(.foreground)
                             }

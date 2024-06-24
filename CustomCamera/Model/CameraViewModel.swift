@@ -4,7 +4,7 @@ import SwiftUI
 import Combine
 import PhotosUI
 
-class CameraViewModel: ObservableObject {
+final class CameraViewModel: ObservableObject {
     
     private let camera: Camera
     private let session: AVCaptureSession
