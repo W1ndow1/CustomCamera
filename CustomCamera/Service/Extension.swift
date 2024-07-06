@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Photos
 
 extension View {
     func viewToImage(view: some View) -> UIImage {
@@ -47,7 +48,9 @@ extension UIDeviceOrientation {
         }
     }
 }
+
 enum LivePhotoMode {
     case on
     case off
 }
+

@@ -4,6 +4,7 @@ import SwiftUI
 import PhotosUI
 
 struct ContentView: View {
+    @StateObject var model = DataModel()
     @StateObject var simpleModel = CameraViewModel()
     @State var zoomValue: String = "0.0"
     @State var showFocusIndicator = false
@@ -18,53 +19,35 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                if #available(iOS 17.0, *) {
-                    simpleModel.cameraPreview.ignoresSafeArea()
-                        .onAppear() {
-                            simpleModel.configure()
-                        }
-                        .onDisappear() {
-                            simpleModel.stopSession()
-                        }
-                        .gesture(MagnifyGesture()
-                            .onChanged { val in
-                                simpleModel.zoom(factor: val.magnification)
-                                zoomValue = String(describing: round(val.magnification))
-                                
-                            }
-                            .onEnded { _ in
-                                simpleModel.zoomInitialize()
-                            }
-                        )
-                        .onTapGesture { location in
-                            //포인터 정보 전달
-                            let screenSize = UIScreen.main.bounds.size
-                            let focusPoint = CGPoint(x: location.x / screenSize.width, y: location.y / screenSize.height)
-                            simpleModel.focusAndExposeTap(focusPoint)
-                            //화면에 포인터 표시
-                            self.focustPoint = location
-                            self.showFocusIndicator = true
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                                self.showFocusIndicator = false
-                            }
-                        }
-                } else {
-                    simpleModel.cameraPreview.ignoresSafeArea()
-                        .onAppear() {
-                            simpleModel.configure()
-                        }
-                        .onDisappear() {
+                simpleModel.cameraPreview.ignoresSafeArea()
+                    .onAppear() {
+                        simpleModel.configure()
+                    }
+                    .onDisappear() {
+                        simpleModel.stopSession()
+                    }
+                    .gesture(MagnifyGesture()
+                        .onChanged { val in
+                            simpleModel.zoom(factor: val.magnification)
+                            zoomValue = String(describing: round(val.magnification))
                             
                         }
-                        .gesture(MagnificationGesture()
-                            .onChanged { value in
-                                simpleModel.zoom(factor: value)
-                            }
-                            .onEnded { _ in
-                                simpleModel.zoomInitialize()
-                            }
-                        )
-                }
+                        .onEnded { _ in
+                            simpleModel.zoomInitialize()
+                        }
+                    )
+                    .onTapGesture { location in
+                        //포인터 정보 전달
+                        let screenSize = UIScreen.main.bounds.size
+                        let focusPoint = CGPoint(x: location.x / screenSize.width, y: location.y / screenSize.height)
+                        simpleModel.focusAndExposeTap(focusPoint)
+                        //화면에 포인터 표시
+                        self.focustPoint = location
+                        self.showFocusIndicator = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                            self.showFocusIndicator = false
+                        }
+                    }
                 if let focustPoint = focustPoint, showFocusIndicator {
                     focusIndicatorButton
                         .position(focustPoint)
@@ -112,7 +95,11 @@ struct ContentView: View {
                 
             }
             .opacity(simpleModel.shutterEffect ? 0 : 1)
+            .task {
+                await model.loadPhotos()
+            }
         }
+        
     }
 }
 
@@ -193,12 +180,12 @@ extension ContentView {
     var captureButton: some View {
         Button(action: {
             simpleModel.capturePhoto()
-    
+            
             let image = ImageRenderer(content: WaterMarkView(model: simpleModel))
             image.scale = displayScale
             
             simpleModel.waterMarkImage = simpleModel.isWaterMarkOn ? image.uiImage : nil
-             
+            
         }, label: {
             Circle()
                 .foregroundStyle(.white)
@@ -234,11 +221,13 @@ extension ContentView {
         }
         .viewRotationEffect(deg: degToFaceUp)
         .fullScreenCover(isPresented: $isImageSeleted) {
-            AlbumListView()
-            //PhotoLibraryView()
+            PhotoCollectionView(photoCollection: model.photoCollection)
+            //환경 설정해서 접근하는 방식으로 변경해보기
+            //AlbumListView()       //앨범 선택하고 가는것
+            //PhotoLibraryView()    //바로 전체사진 버전
         }
     }
-
+    
     var flipCameraButton: some View {
         Button(action: {
             simpleModel.flipCamera()

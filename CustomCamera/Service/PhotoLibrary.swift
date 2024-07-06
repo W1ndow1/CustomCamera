@@ -42,7 +42,7 @@ class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
     deinit {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
-    
+
     func checkPermissionAndFetchAssets() async {
         let granted = await requestPermission()
         if granted {
@@ -75,6 +75,28 @@ class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
         PHPhotoLibrary.shared().register(self)
     }
     
+    static func checkAuthorization() async -> Bool {
+        switch PHPhotoLibrary.authorizationStatus(for: .readWrite) {
+            
+        case .notDetermined:
+            print("Photo library access authroized")
+            return await PHPhotoLibrary.requestAuthorization(for: .readWrite) == .authorized
+        case .restricted:
+            print("Photo library access restricted")
+            return false
+        case .denied:
+            print("Photo library access denied")
+            return false
+        case .authorized:
+            print("Photo library access authorized")
+            return true
+        case .limited:
+            print("Photo library access limited")
+            return false
+        @unknown default:
+            return false
+        }
+    }
     
     //MARK: - 이전코드
     func checkPhotoLibarayAuthorization() {
