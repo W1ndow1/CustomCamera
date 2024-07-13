@@ -221,10 +221,10 @@ extension ContentView {
         }
         .viewRotationEffect(deg: degToFaceUp)
         .fullScreenCover(isPresented: $isImageSeleted) {
-            PhotoCollectionView(photoCollection: model.photoCollection)
+            //PhotoCollectionView(photoCollection: model.photoCollection)
             //환경 설정해서 접근하는 방식으로 변경해보기
             //AlbumListView()       //앨범 선택하고 가는것
-            //PhotoLibraryView()    //바로 전체사진 버전
+            PhotoLibraryView()    //바로 전체사진 버전
         }
     }
     
@@ -248,3 +248,10 @@ extension ContentView {
         .disabled(simpleModel.shutterEffect)
     }
 }
+
+//TODO: - 변경사항
+/*
+ (1) 카메라뷰에서 넘어갈때 fullScreenCover 사용해서 넘어가기
+ (2) navigationstack은 PhotoCollectionView에서 사용하기
+ (3) ScrollViewReader 사용한 위치 다시 해보기
+ */

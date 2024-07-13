@@ -11,9 +11,9 @@ struct PhotoCollectionView: View {
     @ObservedObject var photoCollection: PhotoCollection
     @Environment(\.displayScale) private var displayScale
     @Environment(\.dismiss) var dismiss
+    @Namespace var bottomID
     
-    private static let itemSpacing = 12.0
-    private static let itemSize = CGSize(width: 90, height: 90)
+    private static let itemSize = CGSize(width: 123, height: 123)
     
     private var imageSize: CGSize {
         return CGSize(width: Self.itemSize.width * min(displayScale, 2), height: Self.itemSize.height * min(displayScale, 2))
@@ -23,33 +23,60 @@ struct PhotoCollectionView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVGrid(columns: colums, spacing: 2) {
-                    ForEach(photoCollection.photoAssets) { asset in
-                        NavigationLink {
-                            PhotoView(asset: asset, cache: photoCollection.cache)
-                        } label: {
-                            photoItemView(asset: asset)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    LazyVGrid(columns: colums, spacing: 2) {
+                        ForEach(photoCollection.photoAssets.indices, id: \.self) { index in
+                            let asset = photoCollection.photoAssets[index]
+                            NavigationLink {
+                                PagingPhotoView(asset: asset,
+                                                cache: photoCollection.cache,
+                                                photoCollection: photoCollection)
+                            } label : {
+                                photoItemView(asset: asset)
+                                    .id(asset)
+                            }
+                            .buttonStyle(.borderless)
+                            .accessibilityLabel(asset.accessibilityLabel)
+                            .simultaneousGesture(TapGesture().onEnded({
+                                checkSelectedIndex(index: asset)
+                            }))
                         }
-                        .buttonStyle(.borderless)
-                        .accessibilityLabel(asset.accessibilityLabel)
+                        Button(""){}
+                            .frame(width: 0, height: 0)
+                            .id(bottomID)
+                        
+                    }
+                    .onAppear {
+                        DispatchQueue.main.async {
+                            if let seletedIndex = photoCollection.seletedIndex {
+                                proxy.scrollTo(seletedIndex)
+                            } else {
+                                proxy.scrollTo(bottomID)
+                            }
+                        }
                     }
                 }
-            }
-            .navigationTitle("포토라이브러리")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button{
-                        dismiss()
-                    } label: {
-                        Image(systemName: "camera")
-                            .imageScale(.large)
-                            .foregroundStyle(.foreground)
+                .navigationTitle("전체사진")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button{
+                            dismiss()
+                            photoCollection.seletedIndex = nil
+                        } label: {
+                            Image(systemName: "camera")
+                                .imageScale(.large)
+                                .foregroundStyle(.foreground)
+                        }
                     }
                 }
             }
         }
+    }
+    
+    private func checkSelectedIndex(index: PhotoAsset) {
+        photoCollection.seletedIndex = index.index
     }
     
     private func photoItemView(asset: PhotoAsset) -> some View {
@@ -60,7 +87,6 @@ struct PhotoCollectionView: View {
                 if asset.isFavorite {
                     Image(systemName: "heart.fill")
                         .foregroundStyle(.white)
-                        .font(.callout)
                 }
             }
             .onAppear {

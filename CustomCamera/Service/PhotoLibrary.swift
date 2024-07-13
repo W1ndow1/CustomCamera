@@ -23,11 +23,10 @@ enum AlbumSectionType: Int {
 
 class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
     
+    fileprivate let imageManager = PHCachingImageManager()
     @Published var scale: CGFloat? = nil
     @Published var photos: [PHAsset] = []
     @Published var isAuthorized = false
-    fileprivate let imageManager = PHCachingImageManager()
-    
     @Published var allPhotos = PHFetchResult<PHAsset>()
     @Published var smartAlbums = PHFetchResult<PHAssetCollection>()
     @Published var userCollections = PHFetchResult<PHAssetCollection>()

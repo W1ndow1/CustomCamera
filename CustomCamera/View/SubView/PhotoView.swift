@@ -11,9 +11,13 @@ import Photos
 struct PhotoView: View {
     var asset: PhotoAsset
     var cache: CachedImageManager?
-    @State var image: Image?
-    @State var imageRequestID: PHImageRequestID?
+    var photoAssets: PhotoAssetCollection?
+    
     @Environment(\.dismiss) var dismiss
+    
+    @State private var image: Image?
+    @State private var imageRequestID: PHImageRequestID?
+    @State private var offset = CGSize.zero
     
     var body: some View {
         Group {
@@ -22,6 +26,8 @@ struct PhotoView: View {
                     .resizable()
                     .scaledToFit()
                     .accessibilityLabel(asset.accessibilityLabel)
+                    .offset(offset)
+                    .gesture(swipeToChangePicture)
             }
             else {
                 ProgressView()
@@ -29,7 +35,7 @@ struct PhotoView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea()
-        .navigationTitle("사진")
+        .navigationTitle(itemCount())
         .navigationBarTitleDisplayMode(.inline)
         .task {
             guard image == nil, let cache = cache else { return }
@@ -72,4 +78,33 @@ struct PhotoView: View {
 
 #Preview {
     PhotoView(asset: .init(phAsset: .init(), index: 1))
+}
+
+extension PhotoView {
+
+    var swipeToChangePicture: some Gesture {
+        DragGesture()
+            .onChanged { gesture in
+                withAnimation() {
+                    offset = gesture.translation
+                }
+            }
+            .onEnded { gesture in
+                withAnimation() {
+                    offset = .zero
+                }
+            }
+    }
+    
+    func checkIsDismissable(gesture: _ChangedGesture<DragGesture>.Value) -> Bool {
+        let dismissalbeLocatioin = gesture.translation.height > 50
+        let dismissableVelocity = gesture.velocity.height > 50
+        return dismissalbeLocatioin || dismissableVelocity
+    }
+
+    func itemCount() -> String{
+        let allphotos = photoAssets?.count ?? 0
+        let index = asset.index ?? 0
+        return "\(String(allphotos))/\(String(index + 1))"
+    }
 }

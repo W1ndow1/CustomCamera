@@ -5,21 +5,22 @@
 //  Created by window1 on 6/27/24.
 //
 
-import Foundation
 import Photos
 import SwiftUI
 import os.log
 
 actor CachedImageManager {
 
+    private let imageManager = PHCachingImageManager()
+    
+    private var imageContentMode = PHImageContentMode.aspectFit
+    
     enum CachedImageMangerError: LocalizedError {
         case error(Error)
         case cancelled
         case failed
     }
     
-    private let imageManager = PHCachingImageManager()
-    private var imageContentMode = PHImageContentMode.aspectFit
     private var cachedAssetIdentifiers = [String : Bool]()
     
     private lazy var requestOptions: PHImageRequestOptions = {
@@ -32,6 +33,9 @@ actor CachedImageManager {
         imageManager.allowsCachingHighQualityImages = false
     }
     
+    var cachedImageCount: Int {
+        cachedAssetIdentifiers.keys.count
+    }
     
     func startCaching(for assets: [PhotoAsset], targetSize: CGSize) {
         let phAssets = assets.compactMap({ $0.phAsset })
@@ -42,7 +46,7 @@ actor CachedImageManager {
     }
     
     func stopCaching(for assets: [PhotoAsset], targetSize: CGSize) {
-        let phAsset = assets.compactMap({ $0.phAsset })
+        let phAsset = assets.compactMap { $0.phAsset }
         phAsset.forEach({
             cachedAssetIdentifiers.removeValue(forKey: $0.localIdentifier)
         })
@@ -54,12 +58,13 @@ actor CachedImageManager {
     }
     
     @discardableResult
-    func requestImage(for asset: PhotoAsset, targetSize: CGSize,
-                      completion: @escaping ((image: Image?, isLowerQuality: Bool)?) -> Void) -> PHImageRequestID? {
+    func requestImage(for asset: PhotoAsset, targetSize: CGSize, completion: @escaping ((image: Image?, isLowerQuality: Bool)?) -> Void) -> PHImageRequestID? {
         guard let phAsset = asset.phAsset else {
             completion(nil)
-            return nil }
-        let requestID = imageManager.requestImage(for: phAsset, targetSize: targetSize, contentMode: imageContentMode, options: requestOptions){ image, info in
+            return nil
+        }
+        
+        let requestID = imageManager.requestImage(for: phAsset, targetSize: targetSize, contentMode: imageContentMode, options: requestOptions) { image, info in
             
             if let error = info?[PHImageErrorKey] as? Error {
                 logger.error("CachedImageManager requestImage error: \(error.localizedDescription)")

@@ -17,6 +17,14 @@
          contextName = "View.viewToImage&lt;&#x3c4;_0_0&gt;(view:):CameraViewModel.swift">
       </ContextState>
       <ContextState
+         contextName = "closure #1 in closure #1 in closure #1 in closure #1 in closure #1 in PhotoCollectionView.body.getter:PhotoCollectionView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "asset">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in CameraViewModel.init():CameraViewModel.swift">
       </ContextState>
       <ContextState
@@ -34,6 +42,12 @@
                value = "photoSettings">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in PhotoView_Horizontal_ItemView.body.getter:PhotoView_Horizontal.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in closure #1 in closure #1 in closure #1 in PhotoView_Horizontal.body.getter:PhotoView_Horizontal.swift">
       </ContextState>
       <ContextState
          contextName = "closure #1 in ContentView.captureButton.getter:ContentView.swift">

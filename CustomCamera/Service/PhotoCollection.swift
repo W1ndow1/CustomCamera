@@ -24,6 +24,8 @@ enum PhotoCollectionError: LocalizedError {
 class PhotoCollection: NSObject, ObservableObject {
     
     @Published var photoAssets: PhotoAssetCollection = PhotoAssetCollection(PHFetchResult<PHAsset>())
+    @Published var seletedIndex: Int?
+    @Published var photoAssetsCount: Int?
     
     var albumName: String?
     var identifier: String? {
@@ -55,7 +57,6 @@ class PhotoCollection: NSObject, ObservableObject {
             await refreshPhotoAssets()
         }
     }
-    
     
     init(smartAlbum smartAlbumType: PHAssetCollectionSubtype) {
         self.smartAlbumType = smartAlbumType
@@ -136,10 +137,11 @@ class PhotoCollection: NSObject, ObservableObject {
         do {
             try await PHPhotoLibrary.shared().performChanges {
                 if let albumChangeRequest = PHAssetCollectionChangeRequest(for: assetCollection) {
-                    albumChangeRequest.removeAssets([asset] as NSArray)
+                    albumChangeRequest.removeAssets([asset as Any] as NSArray)
                 }
             }
             await refreshPhotoAssets()
+            
         } catch let error {
             logger.error("Error removing all photos from the album: \(error.localizedDescription)")
             throw PhotoCollectionError.removeAllError(error)
@@ -170,7 +172,7 @@ class PhotoCollection: NSObject, ObservableObject {
         var newFetchResult = fetchResult
         if newFetchResult == nil {
             let fetchOptions = PHFetchOptions()
-            fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+            fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
             if let assetCollection  = self.assetCollection, let fetchResult = (PHAsset.fetchAssets(in: assetCollection, options: fetchOptions) as AnyObject?) as? PHFetchResult<PHAsset> {
                 newFetchResult = fetchResult
             }
@@ -178,6 +180,7 @@ class PhotoCollection: NSObject, ObservableObject {
         if let newFetchResult = newFetchResult {
             await MainActor.run {
                 photoAssets = PhotoAssetCollection(newFetchResult)
+                photoAssetsCount = photoAssets.count
                 print("PhotoCollection photoAssets refreshed: \(self.photoAssets.count)")
             }
         }

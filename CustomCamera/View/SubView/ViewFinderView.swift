@@ -8,15 +8,19 @@
 import SwiftUI
 
 struct ViewFinderView: View {
+    @Binding var image: Image?
     var body: some View {
-        ZStack {
-            Rectangle()
+        GeometryReader { geo in
+            if let image = image {
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: geo.size.width, height: geo.size.height)
+            }
         }
-        .ignoresSafeArea()
-        .background(Color.black)
     }
 }
 
 #Preview {
-    ViewFinderView()
+    ViewFinderView(image: .constant(Image(systemName: "arrow.circlepath")))
 }

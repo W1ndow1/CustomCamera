@@ -36,6 +36,9 @@
 		A8FC1D2A2C353D86009275A8 /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FC1D292C353D86009275A8 /* PhotoView.swift */; };
 		A8FC1D2C2C364DF0009275A8 /* PhotoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FC1D2B2C364DF0009275A8 /* PhotoItemView.swift */; };
 		A8FC1D2E2C370ED8009275A8 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FC1D2D2C370ED8009275A8 /* DataModel.swift */; };
+		A8FC1D302C391BEB009275A8 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FC1D2F2C391BEB009275A8 /* CameraView.swift */; };
+		A8FC1D322C3A4BBD009275A8 /* ViewFinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FC1D312C3A4BBD009275A8 /* ViewFinderView.swift */; };
+		A8FC1D342C3FB658009275A8 /* PagingPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FC1D332C3FB658009275A8 /* PagingPhotoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +73,9 @@
 		A8FC1D292C353D86009275A8 /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
 		A8FC1D2B2C364DF0009275A8 /* PhotoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItemView.swift; sourceTree = "<group>"; };
 		A8FC1D2D2C370ED8009275A8 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		A8FC1D2F2C391BEB009275A8 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		A8FC1D312C3A4BBD009275A8 /* ViewFinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFinderView.swift; sourceTree = "<group>"; };
+		A8FC1D332C3FB658009275A8 /* PagingPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingPhotoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +156,7 @@
 				A88B3F6E2C26BB3700372031 /* PhotoGridView.swift */,
 				A8374B582C1BDDBF00CD1DD3 /* PhotoLibraryView.swift */,
 				A88B3F742C297DF900372031 /* PhotoCollectionView.swift */,
+				A8FC1D2F2C391BEB009275A8 /* CameraView.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -178,8 +185,10 @@
 				A87D92502BE1364300ECF0DD /* WaterMarkView.swift */,
 				A88B3F702C27296300372031 /* PhotoGridCellView.swift */,
 				A88B89A82C21579A0088BBCE /* PhotoDetailView.swift */,
-				A8FC1D292C353D86009275A8 /* PhotoView.swift */,
 				A8FC1D2B2C364DF0009275A8 /* PhotoItemView.swift */,
+				A8FC1D292C353D86009275A8 /* PhotoView.swift */,
+				A8FC1D332C3FB658009275A8 /* PagingPhotoView.swift */,
+				A8FC1D312C3A4BBD009275A8 /* ViewFinderView.swift */,
 			);
 			path = SubView;
 			sourceTree = "<group>";
@@ -260,6 +269,7 @@
 				A88B3F7B2C2C7AEE00372031 /* CachedImageManager.swift in Sources */,
 				A8374B592C1BDDBF00CD1DD3 /* PhotoLibraryView.swift in Sources */,
 				A8FB50342BE48D8500D3A404 /* AppDelegate.swift in Sources */,
+				A8FC1D322C3A4BBD009275A8 /* ViewFinderView.swift in Sources */,
 				A83420712BECCF4200702514 /* PhotoCaptureDelegate.swift in Sources */,
 				A88B3F672C25CE2F00372031 /* PhotoGridViewModel.swift in Sources */,
 				A87D92512BE1364300ECF0DD /* WaterMarkView.swift in Sources */,
@@ -269,6 +279,7 @@
 				A88B3F652C24A5E800372031 /* AlbumListView.swift in Sources */,
 				A888FFE92C1D7FC400B3502A /* PhotoLibrary.swift in Sources */,
 				A88B3F752C297DF900372031 /* PhotoCollectionView.swift in Sources */,
+				A8FC1D342C3FB658009275A8 /* PagingPhotoView.swift in Sources */,
 				A88B89A92C21579A0088BBCE /* PhotoDetailView.swift in Sources */,
 				A83AE9CA2BBFD6BD001BDBDB /* CameraPreview.swift in Sources */,
 				A8FC1D2A2C353D86009275A8 /* PhotoView.swift in Sources */,
@@ -276,6 +287,7 @@
 				A87D924F2BDB502A00ECF0DD /* LensChangeView.swift in Sources */,
 				A8FC1D2E2C370ED8009275A8 /* DataModel.swift in Sources */,
 				A885D9732BFB45DB0072D73B /* Extension.swift in Sources */,
+				A8FC1D302C391BEB009275A8 /* CameraView.swift in Sources */,
 				A83AE9D42BCD0B25001BDBDB /* CameraViewModel.swift in Sources */,
 				A88B3F6F2C26BB3700372031 /* PhotoGridView.swift in Sources */,
 				A80EE44F2BB6AB3000546B95 /* CustomCameraApp.swift in Sources */,

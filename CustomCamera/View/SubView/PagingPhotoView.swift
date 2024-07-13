@@ -10,39 +10,37 @@ import Photos
 
 struct PagingPhotoView: View {
     
-    let imageNames = ["bobcat", "bullElk", "bullElkSparring", "bullTuleElkAndTwoFemales", "coyoteAndBison", "doubleRainbowLowerMammoth" ,"doubleRainbowYellowstone"
-    ]
     var asset: PhotoAsset
-    var cache: CachedImageManager?
+    var cache: CachedImageManager
     var photoCollection: PhotoCollection
-    
-    @State private var image: Image?
-    @State private var imageRequestID: PHImageRequestID?
-    
     
     var body: some View {
         VStack {
-            ScrollViewReader { reader in
+            ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack {
-                        ForEach(photoCollection.photoAssets.indices, id:\.self) { index in
-                            photoItemView(asset: photoCollection.photoAssets[index])
+                        ForEach(photoCollection.photoAssets.indices, id: \.self) { index in
+                            photoItemView(asset: photoCollection.photoAssets[index], cache: cache)
+                                .containerRelativeFrame(.horizontal, count: 1, span: 1, spacing: 1)
+                                .clipped()
                                 .id(index)
                         }
+                    }
+                    .onAppear {
+                        proxy.scrollTo(asset.index)
                     }
                     .scrollTargetLayout()
                 }
                 .frame(height: 600)
                 .scrollTargetBehavior(.viewAligned)
-                .scrollPosition(id: .constant(100))
             }
             
+            /*
             ScrollViewReader { reader in
                 ScrollView(.horizontal) {
                     LazyHStack {
-                        ForEach(imageNames, id: \.self) { imageName in
-                            Image(imageName)
-                                .resizable()
+                        ForEach(photoCollection.photoAssets.indices, id: \.self) { index in
+                            photoItemView(asset: photoCollection.photoAssets[index], cache: cache)
                                 .scaledToFill()
                                 .containerRelativeFrame(.horizontal) { size, axis in
                                     size * 0.09
@@ -56,13 +54,12 @@ struct PagingPhotoView: View {
                 .frame(height: 100)
                 .scrollIndicators(.hidden)
             }
+             */
         }
     }
     
-    private func photoItemView(asset: PhotoAsset) -> some View {
+    private func photoItemView(asset: PhotoAsset, cache: CachedImageManager) -> some View {
         PhotoView_Horizontal_ItemView(asset: asset, cache: cache)
-            .containerRelativeFrame(.horizontal, count: 1, span: 1, spacing: 10)
-            .clipped()
             .onAppear {
                 Task {
                     await photoCollection.cache.startCaching(for:[asset], targetSize: CGSize(width: 1024, height: 1024))
@@ -76,9 +73,6 @@ struct PagingPhotoView: View {
     }
 }
 
-#Preview {
-    PagingPhotoView(asset: .init(identifier: ""), photoCollection: .init(albumNamed: ""))
-}
 
 struct PhotoView_Horizontal_ItemView: View {
     
@@ -94,7 +88,6 @@ struct PhotoView_Horizontal_ItemView: View {
                 image
                     .resizable()
                     .scaledToFit()
-                    .clipped()
             } else {
                 ProgressView()
             }

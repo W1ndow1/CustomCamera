@@ -16,7 +16,6 @@ class DataModel: ObservableObject {
     @Published var viewfinderImage: Image?
     @Published var thumbnailImage: Image?
     
-    
     var isPhotosLoaded = false
 
     func savePhoto(imageData: Data) {

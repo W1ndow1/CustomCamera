@@ -10,11 +10,16 @@ import SwiftUI
 @main
 
 struct CustomCameraApp: App {
-    @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
-    @State private var degToFaceUp: Double = 0
-    
+//    @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
+//    @State private var degToFaceUp: Double = 0
+    init() {
+        UINavigationBar.applyCustomAppearance()
+    }
     var body: some Scene {
         WindowGroup {
+            //ContentView(degToFaceUp: 0)
+            CameraView()
+            /*
             ContentView(degToFaceUp: degToFaceUp)
                 .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
                         var offset: Int = 0
@@ -38,8 +43,18 @@ struct CustomCameraApp: App {
                             offset = 0
                         }
                         degToFaceUp = Double(offset) * 90.0
-                        //print("\(degToFaceUp)")
                     }
+             */
         }
+    }
+}
+
+fileprivate extension UINavigationBar {
+    static func applyCustomAppearance() {
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
 }

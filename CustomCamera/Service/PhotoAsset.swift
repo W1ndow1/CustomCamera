@@ -10,7 +10,7 @@ import Photos
 
 struct PhotoAsset: Identifiable {
     var id: String { identifier }
-    var identifier = UUID().uuidString
+    var identifier: String = UUID().uuidString
     var index: Int?
     var phAsset: PHAsset?
     
@@ -56,15 +56,13 @@ struct PhotoAsset: Identifiable {
     
     func delete() async {
         guard let phAsset = phAsset else { return }
-        Task {
-            do {
-                try await PHPhotoLibrary.shared().performChanges {
-                    PHAssetChangeRequest.deleteAssets([phAsset] as NSArray)
-                }
-                print("PhotoAsset Asset deleted: \(String(describing: index))")
-            } catch {
-                print(error.localizedDescription)
+        do {
+            try await PHPhotoLibrary.shared().performChanges {
+                PHAssetChangeRequest.deleteAssets([phAsset] as NSArray)
             }
+            print("PhotoAsset Asset deleted: \(index ?? -1))")
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }
