@@ -20,40 +20,21 @@
 
 
 ## Screenshot
-
-<style>
-    .section1 {
-        display: flex;
-        gap: 150px;               /* 이미지 사이 간격 */
-        align-items: flex-start;  /* 세로 정렬 */
-        margin-bottom: 40px
-}
-    .section2 {
-        display: flex;
-        gap: 10px;
-        align-items: flex-start;
-        margin-bottom: 40px 
-    }
-    .rotate-90 {
-        transform: rotate(90deg);
-    }
-</style>
-
 1. App UI
-<div class="section1">
+<div style="display: flex; gap: 180px; align-items: flex-start; margin-bottom: 40px;">
   <img src="CustomCamera/Screenshots/cc01.jpeg" width="30%" alt="Camera ViewFinder Portrait" />
-  <img src="CustomCamera/Screenshots/cc02.jpeg" class="rotate-90" width="30%" alt="Camera ViewFinder Landscape Right" />
+  <img src="CustomCamera/Screenshots/cc02.jpeg" style="transform: rotate(90deg);" width="30%" alt="Camera ViewFinder Landscape Right" />
 </div>
 
 2. Change Lens (Ultrawide, Wide, Telescope)
-<div class="section2">
+<div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 40px;">
   <img src="CustomCamera/Screenshots/cc03.jpeg" width="30%" />
   <img src="CustomCamera/Screenshots/cc04.jpeg" width="30%" />
-  <img src="CustomCamera/Screenshots/cc05.jpeg" width="30%"  />
+  <img src="CustomCamera/Screenshots/cc05.jpeg" width="30%" />
 </div>
 
 3. WaterMark & Flashback 
-<div class="section2">
+<div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 40px;">
   <img src="CustomCamera/Screenshots/cc06.jpeg" width="30%" />
   <img src="CustomCamera/Screenshots/cc07.jpg" width="30%" />
 </div>
