@@ -353,7 +353,9 @@ class Camera: NSObject, ObservableObject {
         UIGraphicsBeginImageContext(size)
         
         bottomImage.draw(in: CGRect(origin: .zero, size: bottomImage.size))
-        let topOrigin = CGPoint(x: (bottomImage.size.width - topImage.size.width) / 2, y: (bottomImage.size.height - topImage.size.height) / 2)
+        let topOrigin = CGPoint(
+            x: (bottomImage.size.width - topImage.size.width) / 2,
+            y: (bottomImage.size.height - topImage.size.height) / 2)
         topImage.draw(in: CGRect(origin: topOrigin , size: CGSize(width: topImage.size.width, height: topImage.size.height)), blendMode: .normal, alpha: 1.0)
         
         let newImage = UIGraphicsGetImageFromCurrentImageContext()

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PhotoCollectionView: View {
+    
     @ObservedObject var photoCollection: PhotoCollection
     @Environment(\.displayScale) private var displayScale
     @Environment(\.dismiss) var dismiss
@@ -26,44 +27,36 @@ struct PhotoCollectionView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVGrid(columns: colums, spacing: 2) {
-                        ForEach(photoCollection.photoAssets.indices, id: \.self) { index in
-                            let asset = photoCollection.photoAssets[index]
+                        ForEach(photoCollection.photoAssets) { asset in
                             NavigationLink {
-                                PagingPhotoView(asset: asset,
-                                                cache: photoCollection.cache,
-                                                photoCollection: photoCollection)
+
+//                                PhotoView(asset: asset,
+//                                          cache: photoCollection.cache,
+//                                          photoCollection: photoCollection)
+                                 
+                                
+                                 PagingPhotoView(photoCollection: photoCollection,
+                                 asset: asset,
+                                 cache: photoCollection.cache)
+                                 
                             } label : {
                                 photoItemView(asset: asset)
-                                    .id(asset)
                             }
                             .buttonStyle(.borderless)
                             .accessibilityLabel(asset.accessibilityLabel)
-                            .simultaneousGesture(TapGesture().onEnded({
-                                checkSelectedIndex(index: asset)
-                            }))
-                        }
-                        Button(""){}
-                            .frame(width: 0, height: 0)
-                            .id(bottomID)
-                        
-                    }
-                    .onAppear {
-                        DispatchQueue.main.async {
-                            if let seletedIndex = photoCollection.seletedIndex {
-                                proxy.scrollTo(seletedIndex)
-                            } else {
-                                proxy.scrollTo(bottomID)
-                            }
                         }
                     }
                 }
-                .navigationTitle("전체사진")
+                .defaultScrollAnchor(.bottom)
+                .frame(maxHeight: UIScreen.main.bounds.height)
+                .navigationTitle(photoCollection.albumName ?? "사진보관함")
                 .navigationBarTitleDisplayMode(.inline)
+                .statusBarHidden()
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button{
                             dismiss()
-                            photoCollection.seletedIndex = nil
+                            photoCollection.selectedIndex = nil
                         } label: {
                             Image(systemName: "camera")
                                 .imageScale(.large)
@@ -74,15 +67,11 @@ struct PhotoCollectionView: View {
             }
         }
     }
-    
-    private func checkSelectedIndex(index: PhotoAsset) {
-        photoCollection.seletedIndex = index.index
-    }
-    
+    @ViewBuilder
     private func photoItemView(asset: PhotoAsset) -> some View {
         PhotoItemView(asset: asset, cache: photoCollection.cache, imageSize: imageSize)
             .frame(width: Self.itemSize.width, height: Self.itemSize.height)
-            .clipShape(Rectangle())
+            .clipped()
             .overlay(alignment: .bottomLeading) {
                 if asset.isFavorite {
                     Image(systemName: "heart.fill")
@@ -99,7 +88,6 @@ struct PhotoCollectionView: View {
                     await photoCollection.cache.stopCaching(for:[asset], targetSize: imageSize)
                 }
             }
-        
     }
 }
 

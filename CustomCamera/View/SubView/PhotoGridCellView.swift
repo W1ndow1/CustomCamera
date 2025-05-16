@@ -34,12 +34,12 @@ struct PhotoGridCellView: View {
         }
         .onAppear() {
             //사진 로드하는 코드
-            loadAssetImage(targetSzie: CGSize(width: 100, height: 100))
+            loadAssetImage(targetSize: CGSize(width: 100, height: 100))
             
         }
     }
     
-    func loadAssetImage(targetSzie: CGSize) {
+    func loadAssetImage(targetSize: CGSize) {
         guard let asset else {
             self.image = UIImage(systemName: "photo")
             return
@@ -49,7 +49,7 @@ struct PhotoGridCellView: View {
         options.deliveryMode = .highQualityFormat
         options.isSynchronous = false
         options.isNetworkAccessAllowed = true
-        PHImageManager.default().requestImage(for: asset, targetSize: targetSzie, contentMode: .aspectFit, options: options) { image, _ in
+        PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options) { image, _ in
             if let image {
                 self.image = image
             }

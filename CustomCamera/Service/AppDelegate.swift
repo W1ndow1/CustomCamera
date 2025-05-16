@@ -5,6 +5,7 @@
 //  Created by window1 on 5/3/24.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
@@ -17,3 +18,4 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
         return UIInterfaceOrientationMask(orientationMask)
     }
 }
+#endif

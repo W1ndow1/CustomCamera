@@ -5,7 +5,6 @@
 //  Created by window1 on 6/25/24.
 //
 
-import Foundation
 import Photos
 
 struct PhotoAsset: Identifiable {
@@ -60,7 +59,7 @@ struct PhotoAsset: Identifiable {
             try await PHPhotoLibrary.shared().performChanges {
                 PHAssetChangeRequest.deleteAssets([phAsset] as NSArray)
             }
-            print("PhotoAsset Asset deleted: \(index ?? -1))")
+            //print("PhotoAsset Asset deleted : \(index ?? -1)")
         } catch {
             print(error.localizedDescription)
         }

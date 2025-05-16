@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ViewFinderView: View {
     @Binding var image: Image?
+    
     var body: some View {
         GeometryReader { geo in
             if let image = image {

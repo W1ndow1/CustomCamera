@@ -64,7 +64,7 @@ class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
         }
     }
     
-    //각각 항목에 PHfetchResult 오브젝트 만들기
+    //각각 항목에 PHFetchResult 오브젝트 만들기
     func fetchAsset() {
         let  allPhotosOptions = PHFetchOptions()
         allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]

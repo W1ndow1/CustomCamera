@@ -9,15 +9,19 @@ import SwiftUI
 import Photos
 
 struct PhotoView: View {
-    var asset: PhotoAsset
-    var cache: CachedImageManager?
-    var photoAssets: PhotoAssetCollection?
-    
+   
     @Environment(\.dismiss) var dismiss
     
+    @State var asset: PhotoAsset
+    var cache: CachedImageManager?
+    var photoCollection: PhotoCollection?
+    
+    @State private var offset = CGSize.zero
     @State private var image: Image?
     @State private var imageRequestID: PHImageRequestID?
-    @State private var offset = CGSize.zero
+    @GestureState var dragPosition = CGSize.zero
+    
+    private let imageSize = CGSize(width: 1024, height: 1024)
     
     var body: some View {
         Group {
@@ -26,23 +30,27 @@ struct PhotoView: View {
                     .resizable()
                     .scaledToFit()
                     .accessibilityLabel(asset.accessibilityLabel)
-                    .offset(offset)
-                    .gesture(swipeToChangePicture)
             }
             else {
                 ProgressView()
             }
         }
+        .offset(dragPosition)
+        .gesture(
+            DragGesture()
+                .updating($dragPosition, body: { value, state, transaction in
+                    state.width = value.translation.width
+                }))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea()
         .navigationTitle(itemCount())
         .navigationBarTitleDisplayMode(.inline)
         .task {
             guard image == nil, let cache = cache else { return }
-            imageRequestID = await cache.requestImage(for: asset, targetSize: CGSize(width: 1024, height: 1024)) { result in
+            imageRequestID = await cache.requestImage(for: asset, targetSize: imageSize) { result in
                 Task {
                     if let result = result {
-                        image = result.image
+                        self.image = result.image
                     }
                 }
             }
@@ -52,9 +60,7 @@ struct PhotoView: View {
                 Button {
                     Task {
                         await asset.delete()
-                        await MainActor.run {
-                            dismiss()
-                        }
+                        updateAsset()
                     }
                 } label: {
                     Image(systemName: "trash")
@@ -74,6 +80,19 @@ struct PhotoView: View {
             }
         }
     }
+    private func updateAsset() {
+        if let oldAssetIndex = asset.index {
+            let newAssetIndex = oldAssetIndex - 1
+            self.asset = photoCollection?.photoAssets[newAssetIndex] ?? .init(identifier: "")
+            Task {
+                imageRequestID = await cache?.requestImage(for: asset, targetSize: imageSize) { result in
+                    if let result = result {
+                        self.image = result.image
+                    }
+                }
+            }
+        }
+    }
 }
 
 #Preview {
@@ -81,7 +100,6 @@ struct PhotoView: View {
 }
 
 extension PhotoView {
-
     var swipeToChangePicture: some Gesture {
         DragGesture()
             .onChanged { gesture in
@@ -95,16 +113,10 @@ extension PhotoView {
                 }
             }
     }
-    
-    func checkIsDismissable(gesture: _ChangedGesture<DragGesture>.Value) -> Bool {
-        let dismissalbeLocatioin = gesture.translation.height > 50
-        let dismissableVelocity = gesture.velocity.height > 50
-        return dismissalbeLocatioin || dismissableVelocity
-    }
 
     func itemCount() -> String{
-        let allphotos = photoAssets?.count ?? 0
-        let index = asset.index ?? 0
-        return "\(String(allphotos))/\(String(index + 1))"
+        let allphotos = photoCollection?.photoAssets.count ?? 0
+        let photoIndex = asset.index ?? 0
+        return "\(String(photoIndex))/\(String(allphotos))"
     }
 }

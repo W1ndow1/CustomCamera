@@ -24,17 +24,20 @@ enum PhotoCollectionError: LocalizedError {
 class PhotoCollection: NSObject, ObservableObject {
     
     @Published var photoAssets: PhotoAssetCollection = PhotoAssetCollection(PHFetchResult<PHAsset>())
-    @Published var seletedIndex: Int?
-    @Published var photoAssetsCount: Int?
+    @Published var selectedIndex: Int?
+    @Published var selectedItem: PhotoAsset?
     
-    var albumName: String?
     var identifier: String? {
         assetCollection?.localIdentifier
     }
+    var albumName: String?
+    
     var smartAlbumType: PHAssetCollectionSubtype?
+    
     let cache = CachedImageManager()
     
     private var assetCollection: PHAssetCollection?
+    
     private var createAlbumIfNotFound = false
     
     
@@ -144,6 +147,7 @@ class PhotoCollection: NSObject, ObservableObject {
             
         } catch let error {
             logger.error("Error removing all photos from the album: \(error.localizedDescription)")
+            print("Error removing all photos from the album: \(error.localizedDescription)")
             throw PhotoCollectionError.removeAllError(error)
         }
     }
@@ -168,7 +172,7 @@ class PhotoCollection: NSObject, ObservableObject {
     
     
     
-    private func refreshPhotoAssets(_ fetchResult: PHFetchResult<PHAsset>? = nil) async {
+    func refreshPhotoAssets(_ fetchResult: PHFetchResult<PHAsset>? = nil) async {
         var newFetchResult = fetchResult
         if newFetchResult == nil {
             let fetchOptions = PHFetchOptions()
@@ -180,8 +184,7 @@ class PhotoCollection: NSObject, ObservableObject {
         if let newFetchResult = newFetchResult {
             await MainActor.run {
                 photoAssets = PhotoAssetCollection(newFetchResult)
-                photoAssetsCount = photoAssets.count
-                print("PhotoCollection photoAssets refreshed: \(self.photoAssets.count)")
+                //print("PhotoCollection photoAssets refreshed: \(self.photoAssets.count)")
             }
         }
     }

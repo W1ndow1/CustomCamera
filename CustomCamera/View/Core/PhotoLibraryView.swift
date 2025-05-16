@@ -29,14 +29,6 @@ struct PhotoLibraryView: View {
                                 }
                             }
                         }
-                    
-                        .onAppear {
-                            DispatchQueue.main.async {
-                                if let lastIndex = viewModel.photos.indices.last {
-                                    proxy.scrollTo(lastIndex, anchor: .bottom)
-                                }
-                            }
-                        }
                     }
                     .navigationTitle("라이브러리")
                     .navigationBarTitleDisplayMode(.inline)

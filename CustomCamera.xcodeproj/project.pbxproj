@@ -16,6 +16,7 @@
 		A83AE9CA2BBFD6BD001BDBDB /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */; };
 		A83AE9D22BCB73BB001BDBDB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A83AE9D12BCB73BB001BDBDB /* README.md */; };
 		A83AE9D42BCD0B25001BDBDB /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83AE9D32BCD0B25001BDBDB /* CameraViewModel.swift */; };
+		A849BB3A2C54AF2800AC8FF7 /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A849BB392C54AF2800AC8FF7 /* CameraService.swift */; };
 		A87D924F2BDB502A00ECF0DD /* LensChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D924E2BDB502A00ECF0DD /* LensChangeView.swift */; };
 		A87D92512BE1364300ECF0DD /* WaterMarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D92502BE1364300ECF0DD /* WaterMarkView.swift */; };
 		A885D9732BFB45DB0072D73B /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A885D9722BFB45DB0072D73B /* Extension.swift */; };
@@ -31,6 +32,15 @@
 		A88B3F7B2C2C7AEE00372031 /* CachedImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88B3F7A2C2C7AEE00372031 /* CachedImageManager.swift */; };
 		A88B3F7D2C2E394000372031 /* PhotoAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88B3F7C2C2E394000372031 /* PhotoAssetCollection.swift */; };
 		A88B89A92C21579A0088BBCE /* PhotoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88B89A82C21579A0088BBCE /* PhotoDetailView.swift */; };
+		A897A0D02C46CD5D001C66E7 /* SampleDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A897A0CF2C46CD5D001C66E7 /* SampleDataModel.swift */; };
+		A897A0D22C46CEB9001C66E7 /* PhotoGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A897A0D12C46CEB9001C66E7 /* PhotoGalleryView.swift */; };
+		A8CA6CBA2DD735F400E8E9B5 /* cc04.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A8CA6CB62DD735F400E8E9B5 /* cc04.jpeg */; };
+		A8CA6CBB2DD735F400E8E9B5 /* cc03.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A8CA6CB52DD735F400E8E9B5 /* cc03.jpeg */; };
+		A8CA6CBC2DD735F400E8E9B5 /* cc05.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A8CA6CB72DD735F400E8E9B5 /* cc05.jpeg */; };
+		A8CA6CBD2DD735F400E8E9B5 /* cc01.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A8CA6CB32DD735F400E8E9B5 /* cc01.jpeg */; };
+		A8CA6CBE2DD735F400E8E9B5 /* cc06.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A8CA6CB82DD735F400E8E9B5 /* cc06.jpeg */; };
+		A8CA6CBF2DD735F400E8E9B5 /* cc02.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A8CA6CB42DD735F400E8E9B5 /* cc02.jpeg */; };
+		A8CA6CC02DD735F400E8E9B5 /* cc07.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A8CA6CB92DD735F400E8E9B5 /* cc07.jpg */; };
 		A8FB50342BE48D8500D3A404 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FB50332BE48D8500D3A404 /* AppDelegate.swift */; };
 		A8FB50362BE62EAD00D3A404 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FB50352BE62EAD00D3A404 /* Camera.swift */; };
 		A8FC1D2A2C353D86009275A8 /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FC1D292C353D86009275A8 /* PhotoView.swift */; };
@@ -53,6 +63,7 @@
 		A83AE9C92BBFD6BD001BDBDB /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		A83AE9D12BCB73BB001BDBDB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A83AE9D32BCD0B25001BDBDB /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
+		A849BB392C54AF2800AC8FF7 /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		A87D924E2BDB502A00ECF0DD /* LensChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensChangeView.swift; sourceTree = "<group>"; };
 		A87D92502BE1364300ECF0DD /* WaterMarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterMarkView.swift; sourceTree = "<group>"; };
 		A885D9722BFB45DB0072D73B /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
@@ -68,6 +79,15 @@
 		A88B3F7A2C2C7AEE00372031 /* CachedImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedImageManager.swift; sourceTree = "<group>"; };
 		A88B3F7C2C2E394000372031 /* PhotoAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAssetCollection.swift; sourceTree = "<group>"; };
 		A88B89A82C21579A0088BBCE /* PhotoDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailView.swift; sourceTree = "<group>"; };
+		A897A0CF2C46CD5D001C66E7 /* SampleDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataModel.swift; sourceTree = "<group>"; };
+		A897A0D12C46CEB9001C66E7 /* PhotoGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGalleryView.swift; sourceTree = "<group>"; };
+		A8CA6CB32DD735F400E8E9B5 /* cc01.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cc01.jpeg; sourceTree = "<group>"; };
+		A8CA6CB42DD735F400E8E9B5 /* cc02.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cc02.jpeg; sourceTree = "<group>"; };
+		A8CA6CB52DD735F400E8E9B5 /* cc03.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cc03.jpeg; sourceTree = "<group>"; };
+		A8CA6CB62DD735F400E8E9B5 /* cc04.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cc04.jpeg; sourceTree = "<group>"; };
+		A8CA6CB72DD735F400E8E9B5 /* cc05.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cc05.jpeg; sourceTree = "<group>"; };
+		A8CA6CB82DD735F400E8E9B5 /* cc06.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cc06.jpeg; sourceTree = "<group>"; };
+		A8CA6CB92DD735F400E8E9B5 /* cc07.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cc07.jpg; sourceTree = "<group>"; };
 		A8FB50332BE48D8500D3A404 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8FB50352BE62EAD00D3A404 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		A8FC1D292C353D86009275A8 /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
@@ -109,6 +129,8 @@
 		A80EE44D2BB6AB3000546B95 /* CustomCamera */ = {
 			isa = PBXGroup;
 			children = (
+				A8CA6CB22DD729B700E8E9B5 /* Screenshots */,
+				A84FA1412C5A05950000C7E6 /* ViewModel */,
 				A83AE9C62BB841B2001BDBDB /* Service */,
 				A80EE45E2BB6B79000546B95 /* View */,
 				A80EE45D2BB6B78100546B95 /* Model */,
@@ -131,9 +153,10 @@
 		A80EE45D2BB6B78100546B95 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A8FC1D2D2C370ED8009275A8 /* DataModel.swift */,
 				A83AE9D32BCD0B25001BDBDB /* CameraViewModel.swift */,
 				A88B3F662C25CE2F00372031 /* PhotoGridViewModel.swift */,
-				A8FC1D2D2C370ED8009275A8 /* DataModel.swift */,
+				A897A0CF2C46CD5D001C66E7 /* SampleDataModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -157,6 +180,7 @@
 				A8374B582C1BDDBF00CD1DD3 /* PhotoLibraryView.swift */,
 				A88B3F742C297DF900372031 /* PhotoCollectionView.swift */,
 				A8FC1D2F2C391BEB009275A8 /* CameraView.swift */,
+				A897A0D12C46CEB9001C66E7 /* PhotoGalleryView.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -173,8 +197,16 @@
 				A88B3F7C2C2E394000372031 /* PhotoAssetCollection.swift */,
 				A88B3F762C2AAF3500372031 /* PhotoCollection.swift */,
 				A88B3F7A2C2C7AEE00372031 /* CachedImageManager.swift */,
+				A849BB392C54AF2800AC8FF7 /* CameraService.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		A84FA1412C5A05950000C7E6 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		A87D924D2BDB4F9700ECF0DD /* SubView */ = {
@@ -191,6 +223,20 @@
 				A8FC1D312C3A4BBD009275A8 /* ViewFinderView.swift */,
 			);
 			path = SubView;
+			sourceTree = "<group>";
+		};
+		A8CA6CB22DD729B700E8E9B5 /* Screenshots */ = {
+			isa = PBXGroup;
+			children = (
+				A8CA6CB32DD735F400E8E9B5 /* cc01.jpeg */,
+				A8CA6CB42DD735F400E8E9B5 /* cc02.jpeg */,
+				A8CA6CB52DD735F400E8E9B5 /* cc03.jpeg */,
+				A8CA6CB62DD735F400E8E9B5 /* cc04.jpeg */,
+				A8CA6CB72DD735F400E8E9B5 /* cc05.jpeg */,
+				A8CA6CB82DD735F400E8E9B5 /* cc06.jpeg */,
+				A8CA6CB92DD735F400E8E9B5 /* cc07.jpg */,
+			);
+			path = Screenshots;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -254,6 +300,13 @@
 				A83AE9D22BCB73BB001BDBDB /* README.md in Resources */,
 				A80EE4572BB6AB3200546B95 /* Preview Assets.xcassets in Resources */,
 				A80EE4532BB6AB3200546B95 /* Assets.xcassets in Resources */,
+				A8CA6CBA2DD735F400E8E9B5 /* cc04.jpeg in Resources */,
+				A8CA6CBB2DD735F400E8E9B5 /* cc03.jpeg in Resources */,
+				A8CA6CBC2DD735F400E8E9B5 /* cc05.jpeg in Resources */,
+				A8CA6CBD2DD735F400E8E9B5 /* cc01.jpeg in Resources */,
+				A8CA6CBE2DD735F400E8E9B5 /* cc06.jpeg in Resources */,
+				A8CA6CBF2DD735F400E8E9B5 /* cc02.jpeg in Resources */,
+				A8CA6CC02DD735F400E8E9B5 /* cc07.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,9 +325,11 @@
 				A8FC1D322C3A4BBD009275A8 /* ViewFinderView.swift in Sources */,
 				A83420712BECCF4200702514 /* PhotoCaptureDelegate.swift in Sources */,
 				A88B3F672C25CE2F00372031 /* PhotoGridViewModel.swift in Sources */,
+				A849BB3A2C54AF2800AC8FF7 /* CameraService.swift in Sources */,
 				A87D92512BE1364300ECF0DD /* WaterMarkView.swift in Sources */,
 				A88B3F6B2C25E49200372031 /* AlbumTitleView.swift in Sources */,
 				A88B3F772C2AAF3500372031 /* PhotoCollection.swift in Sources */,
+				A897A0D02C46CD5D001C66E7 /* SampleDataModel.swift in Sources */,
 				A8FC1D2C2C364DF0009275A8 /* PhotoItemView.swift in Sources */,
 				A88B3F652C24A5E800372031 /* AlbumListView.swift in Sources */,
 				A888FFE92C1D7FC400B3502A /* PhotoLibrary.swift in Sources */,
@@ -283,6 +338,7 @@
 				A88B89A92C21579A0088BBCE /* PhotoDetailView.swift in Sources */,
 				A83AE9CA2BBFD6BD001BDBDB /* CameraPreview.swift in Sources */,
 				A8FC1D2A2C353D86009275A8 /* PhotoView.swift in Sources */,
+				A897A0D22C46CEB9001C66E7 /* PhotoGalleryView.swift in Sources */,
 				A80EE4512BB6AB3000546B95 /* ContentView.swift in Sources */,
 				A87D924F2BDB502A00ECF0DD /* LensChangeView.swift in Sources */,
 				A8FC1D2E2C370ED8009275A8 /* DataModel.swift in Sources */,
@@ -426,7 +482,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CustomCamera/Preview Content\"";
-				DEVELOPMENT_TEAM = 9RGJD2MSP6;
+				DEVELOPMENT_TEAM = AK7S865VNK;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -468,7 +524,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CustomCamera/Preview Content\"";
-				DEVELOPMENT_TEAM = 9RGJD2MSP6;
+				DEVELOPMENT_TEAM = AK7S865VNK;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

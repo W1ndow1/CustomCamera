@@ -84,6 +84,16 @@ actor CachedImageManager {
         return requestID
     }
     
+    func requestImage(for asset: PHAsset, targetSize: CGSize, completion: @escaping(UIImage?) -> Void) {
+        let options = PHImageRequestOptions()
+        options.isSynchronous = false
+        options.deliveryMode = .highQualityFormat
+        imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: { image, _ in
+            completion(image)
+        })
+    }
+    
+    
     func cancelImageRequest(for requestID: PHImageRequestID) {
         imageManager.cancelImageRequest(requestID)
     }
