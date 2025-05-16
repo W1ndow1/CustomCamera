@@ -22,22 +22,27 @@ A customizable camera application.
 ## Screenshots
 
 ### 1. App UI  
+<div>
 <img src="CustomCamera/Screenshots/cc01.jpeg" width="30%" alt="Camera ViewFinder Portrait" />
-<img src="CustomCamera/Screenshots/cc02.jpeg" width="65%" alt="Camera ViewFinder Landscape Right" />
+<img src="CustomCamera/Screenshots/cc02.jpeg" width="50%" alt="Camera ViewFinder Landscape Right" />
+</div>
 
 ---
 
 ### 2. Change Lens (Ultrawide, Wide, Telescope)  
+<div>
 <img src="CustomCamera/Screenshots/cc03.jpeg" width="30%" />
 <img src="CustomCamera/Screenshots/cc04.jpeg" width="30%" />
 <img src="CustomCamera/Screenshots/cc05.jpeg" width="30%" />
+</div>
 
 ---
 
 ### 3. Watermark & Flashback  
+<div>
 <img src="CustomCamera/Screenshots/cc06.jpeg" width="30%" />
 <img src="CustomCamera/Screenshots/cc07.jpg" width="30%" />
-
+</div>
 
 
 ## REFERENCE
